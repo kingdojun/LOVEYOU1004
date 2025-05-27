@@ -1,30 +1,172 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>오답노트 복습</title>
-  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      background: #f4f4f4;
+      margin: 0;
+      font-family: "Apple SD Gothic Neo", sans-serif;
+    }
+    .quiz-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .quiz-box {
+      background: white;
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      max-width: 500px;
+      width: 90%;
+      text-align: center;
+    }
+    .question {
+      font-size: 2.2rem;
+      font-weight: bold;
+    }
+    .counter {
+      font-size: 1rem;
+      color: #666;
+      margin-bottom: 1rem;
+    }
+    .choices {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 2rem;
+    }
+    .choices button {
+      flex: 0 0 45%;
+      max-width: 45%;
+      font-size: 1rem;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      background: #eeeeee;
+      color: #333;
+    }
+    .choices button.correct {
+      background-color: #4CAF50;
+      color: white;
+    }
+    .choices button.wrong {
+      background-color: #f44336;
+      color: white;
+    }
+    #start-button {
+      margin-top: 24px;
+      padding: 12px 24px;
+      font-size: 1.1rem;
+      background: #2e7d32;
+      color: white;
+      border: none;
+      border-radius: 10px;
+    }
+  </style>
 </head>
 <body>
   <div class="quiz-container">
     <div class="quiz-box">
-      <div class="question-count" id="question-count">1 / N</div>
-      <div class="question" id="question">오답 단어</div>
+      <div class="counter" id="counter"></div>
+      <div class="question" id="question">오답노트 복습</div>
       <div class="choices" id="choices"></div>
-      <div class="pause-button" id="pause-button">⏸ 일시정지</div>
+      <button id="start-button">복습 시작</button>
     </div>
   </div>
 
   <script>
     const saved = localStorage.getItem("middle_wrong");
-    const quizData = saved ? JSON.parse(saved) : [];
+    const originalData = saved ? JSON.parse(saved) : [];
 
-    if (!quizData || quizData.length === 0) {
-      alert("오답이 없습니다! 메인 메뉴로 이동합니다.");
-      window.location.href = "menu.html";
+    const questionEl = document.getElementById("question");
+    const choicesEl = document.getElementById("choices");
+    const counterEl = document.getElementById("counter");
+    const startButton = document.getElementById("start-button");
+
+    let quizData = [];
+    let currentIndex = 0;
+    let clickable = true;
+
+    function speak(text) {
+      if (window.speechSynthesis.speaking) {
+        window.speechSynthesis.cancel();
+      }
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = "en-US";
+      speechSynthesis.speak(utter);
     }
+
+    function loadQuiz() {
+      if (currentIndex >= quizData.length) {
+        alert("복습 완료! 수고했어요 😊");
+        window.location.href = "menu.html";
+        return;
+      }
+
+      clickable = true;
+      const current = quizData[currentIndex];
+      const word = current.word || current.idiom || "???";
+      const correct = current.meaning;
+
+      questionEl.textContent = word;
+      counterEl.textContent = (currentIndex + 1) + " / " + quizData.length;
+      speak(word);
+      choicesEl.innerHTML = "";
+
+      const choices = [correct];
+      while (choices.length < 4) {
+        const choice = quizData[Math.floor(Math.random() * quizData.length)].meaning;
+        if (!choices.includes(choice)) choices.push(choice);
+      }
+
+      choices.sort(() => Math.random() - 0.5);
+
+      choices.forEach(choice => {
+        const btn = document.createElement("button");
+        btn.textContent = choice;
+        btn.onclick = () => {
+          if (!clickable) return;
+          clickable = false;
+
+          if (choice === correct) {
+            btn.classList.add("correct");
+          } else {
+            btn.classList.add("wrong");
+            const correctBtn = [...choicesEl.children].find(b => b.textContent === correct);
+            if (correctBtn) correctBtn.classList.add("correct");
+          }
+
+          setTimeout(() => {
+            currentIndex++;
+            loadQuiz();
+          }, 1800);
+        };
+        choicesEl.appendChild(btn);
+      });
+    }
+
+    startButton.addEventListener("click", () => {
+      document.activeElement.blur();
+      if (!originalData || originalData.length === 0) {
+        alert("오답이 없습니다!");
+        window.location.href = "menu.html";
+      } else if (originalData.length <= 3) {
+        alert("오답이 3개 이하군요! 🎉 축하해요!");
+        window.location.href = "menu.html";
+      } else {
+        quizData = originalData.slice(); // 복사
+        quizData.sort(() => Math.random() - 0.5); // 랜덤 섞기
+        startButton.style.display = "none";
+        loadQuiz();
+      }
+    });
   </script>
-  <script src="script_middle.js" defer></script>
 </body>
 </html>
