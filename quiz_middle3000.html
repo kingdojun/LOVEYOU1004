@@ -249,6 +249,29 @@ body {
   cursor: pointer;
 }
 
+
+.choice {
+  flex: 0 0 42%;
+  max-width: 42%;
+  text-align: center;
+  background: #fff;
+  border: 1.5px solid #bdc3c7;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 15px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  cursor: pointer;
+  word-break: keep-all;
+}
+#choices {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px 16px;
+  max-width: 400px;
+  margin: 0 auto 30px;
+}
+
 </style>
 
   <meta charset="UTF-8" />
@@ -343,6 +366,9 @@ function loadQuestion() {
     const btn = document.createElement("div");
     btn.className = "choice";
     btn.innerText = opt;
+
+btn.setAttribute("style", "flex: 0 0 42%; max-width: 42%; font-size: 15px; padding: 10px 12px;");
+
     btn.onclick = () => checkAnswer(opt, q.meaning);
     choicesContainer.appendChild(btn);
   });
