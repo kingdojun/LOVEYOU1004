@@ -1,20 +1,5 @@
 
-function speakWord(word) {
-  if (!window.speechSynthesis) return;
-  window.speechSynthesis.cancel(); // 중복 방지
-  const utterance = new SpeechSynthesisUtterance(word);
-  utterance.lang = 'en-US';
-  utterance.rate = 0.9;
-  window.speechSynthesis.speak(utterance);
-}
-
 let rawData = JSON.parse(localStorage.getItem("wrongWords_middle3000")) || [];
-if (!Array.isArray(rawData) || rawData.length === 0) {
-  document.getElementById("question").innerText = "오답 데이터가 없습니다.";
-  document.getElementById("choices").innerHTML = "";
-  document.getElementById("timer").style.display = "none";
-  throw new Error("No wrongWords_middle3000 data found.");
-}
 console.log('오답 데이터 수:', rawData.length);
 console.log('오답 데이터 수:', rawData.length);
 let data = [];
@@ -80,7 +65,6 @@ function showQuestion() {
   const item = data[current];
   document.getElementById("counter").innerText = `${current + 1}/${data.length}`;
   document.getElementById("question").innerText = item.word;
-  speakWord(item.word);
 
   const choicesDiv = document.getElementById("choices");
   choicesDiv.innerHTML = "";
@@ -112,27 +96,7 @@ function showQuestion() {
 
 function nextQuestion() {
   current = (current + 1) % data.length;
-  
-  // reset styles
-  const choicesDiv = document.getElementById("choices");
-  if (choicesDiv) {
-    [...choicesDiv.children].forEach(el => {
-      el.classList.remove("correct", "incorrect");
-      el.style.backgroundColor = "";
-      el.style.borderColor = "";
-    });
-  }
   showQuestion();
 }
 
-
-  // reset styles
-  const choicesDiv = document.getElementById("choices");
-  if (choicesDiv) {
-    [...choicesDiv.children].forEach(el => {
-      el.classList.remove("correct", "incorrect");
-      el.style.backgroundColor = "";
-      el.style.borderColor = "";
-    });
-  }
-  showQuestion();
+showQuestion();
