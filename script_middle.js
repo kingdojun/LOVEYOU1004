@@ -53,9 +53,10 @@ function showQuestion() {
     btn.textContent = choiceText;
     btn.className = "choice-btn";
     btn.onclick = () => {
+      btn.blur();
       clearInterval(timer);
       const allBtns = document.querySelectorAll(".choice-btn");
-      allBtns.forEach(b => b.disabled = true);
+      allBtns.forEach(b => { b.disabled = true; b.blur(); });
 
       if (btn.textContent === q.meaning) {
         btn.style.backgroundColor = "#A5D6A7";
@@ -64,7 +65,9 @@ function showQuestion() {
         btn.style.backgroundColor = "#EF9A9A";
         const correctBtn = Array.from(allBtns).find(b => b.textContent === q.meaning);
         if (correctBtn) correctBtn.style.backgroundColor = "#A5D6A7";
-        handleAnswer(false);
+        wrongAnswers.push(quiz[current]);
+      localStorage.setItem("middle_wrong", JSON.stringify(wrongAnswers));
+      handleAnswer(false);
       }
     };
     container.appendChild(btn);
@@ -93,6 +96,8 @@ function startCountdown() {
     display.textContent = `${current + 1} / ${quiz.length} ⏳ ${count}`;
     if (count === 0) {
       clearInterval(timer);
+      wrongAnswers.push(quiz[current]);
+      localStorage.setItem("middle_wrong", JSON.stringify(wrongAnswers));
       handleAnswer(false);
     }
   }, 1000);
