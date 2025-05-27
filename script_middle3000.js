@@ -1,6 +1,7 @@
 
 let rawData = JSON.parse(localStorage.getItem("wrongWords_middle3000")) || [];
 console.log('오답 데이터 수:', rawData.length);
+console.log('오답 데이터 수:', rawData.length);
 let data = [];
 let allMeanings = rawData.map(item => item.meaning);
 let current = 0;
