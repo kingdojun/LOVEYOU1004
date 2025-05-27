@@ -272,6 +272,32 @@ body {
   margin: 0 auto 30px;
 }
 
+
+#choices {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px 12px;
+  max-width: 420px;
+  margin: 0 auto 30px;
+}
+.choice {
+  display: block;
+  width: 45%;
+  max-width: 45%;
+  box-sizing: border-box;
+  text-align: center;
+  background: #fff;
+  border: 1.5px solid #bdc3c7;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 15px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  cursor: pointer;
+  white-space: normal;
+  word-break: keep-all;
+}
+
 </style>
 
   <meta charset="UTF-8" />
@@ -367,7 +393,7 @@ function loadQuestion() {
     btn.className = "choice";
     btn.innerText = opt;
 
-btn.setAttribute("style", "flex: 0 0 42%; max-width: 42%; font-size: 15px; padding: 10px 12px;");
+btn.setAttribute("style", "display:block;width:45%;max-width:45%;font-size:15px;padding:10px 12px;box-sizing:border-box;");
 
     btn.onclick = () => checkAnswer(opt, q.meaning);
     choicesContainer.appendChild(btn);
