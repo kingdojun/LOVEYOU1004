@@ -53,19 +53,10 @@ body {
   background-color: #f0f0f0;
   cursor: pointer;
   transition: background-color 0.3s;
-
-  -webkit-tap-highlight-color: transparent;
-  user-select: none;
 }
 
 .choice-btn:hover {
   background-color: #e0e0e0;
-}
-
-.choice-btn:focus,
-.choice-btn:active {
-  outline: none;
-  background-color: #f0f0f0;
 }
 
 .pause-button {
