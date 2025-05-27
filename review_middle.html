@@ -103,6 +103,14 @@
       speechSynthesis.speak(utter);
     }
 
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
     function loadQuiz() {
       if (currentIndex >= quizData.length) {
         alert("복습 완료! 수고했어요 😊");
@@ -120,13 +128,14 @@
       speak(word);
       choicesEl.innerHTML = "";
 
+      const allMeanings = [...quizData.map(q => q.meaning)];
       const choices = [correct];
       while (choices.length < 4) {
-        const choice = quizData[Math.floor(Math.random() * quizData.length)].meaning;
+        const choice = allMeanings[Math.floor(Math.random() * allMeanings.length)];
         if (!choices.includes(choice)) choices.push(choice);
       }
 
-      choices.sort(() => Math.random() - 0.5);
+      shuffle(choices);
 
       choices.forEach(choice => {
         const btn = document.createElement("button");
@@ -154,6 +163,7 @@
 
     startButton.addEventListener("click", () => {
       document.activeElement.blur();
+
       if (!originalData || originalData.length === 0) {
         alert("오답이 없습니다!");
         window.location.href = "menu.html";
@@ -161,8 +171,7 @@
         alert("오답이 3개 이하군요! 🎉 축하해요!");
         window.location.href = "menu.html";
       } else {
-        quizData = originalData.slice(); // 복사
-        quizData.sort(() => Math.random() - 0.5); // 랜덤 섞기
+        quizData = shuffle(originalData.slice()); // 중복 없는 순서
         startButton.style.display = "none";
         loadQuiz();
       }
