@@ -5,12 +5,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>오답노트 복습</title>
-  <link rel="stylesheet" href="style.css" />
   <style>
     body {
       background: #f4f4f4;
       margin: 0;
-      font-family: "Apple SD Gothic Neo", sans-serif;
+      font-family: sans-serif;
     }
     .quiz-container {
       display: flex;
@@ -28,14 +27,14 @@
       text-align: center;
     }
     .question {
-      font-size: 2.2rem;
+      font-size: 2rem;
       font-weight: bold;
     }
     .choices {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 12px;
+      gap: 10px;
       margin-top: 2rem;
     }
     .choices button {
@@ -56,11 +55,6 @@
       background-color: #f44336;
       color: white;
     }
-    .pause-button {
-      margin-top: 20px;
-      font-size: 1rem;
-      color: #666;
-    }
     #start-button {
       margin-top: 24px;
       padding: 12px 24px;
@@ -78,19 +72,12 @@
       <div class="question" id="question">오답노트 복습</div>
       <div class="choices" id="choices"></div>
       <button id="start-button">복습 시작</button>
-      <div class="pause-button">⏸ 일시정지</div>
     </div>
   </div>
 
   <script>
     const saved = localStorage.getItem("middle_wrong");
     const quizData = saved ? JSON.parse(saved) : [];
-
-    // 오답 3개 이하면 축하 메시지 후 자동 종료
-    if (!quizData || quizData.length <= 3) {
-      alert("오답이 3개 이하군요! 🎉 축하해요!");
-      window.location.href = "menu.html";
-    }
 
     const questionEl = document.getElementById("question");
     const choicesEl = document.getElementById("choices");
@@ -150,8 +137,16 @@
 
     startButton.addEventListener("click", () => {
       document.activeElement.blur();
-      startButton.style.display = "none";
-      loadQuiz();
+      if (!quizData || quizData.length === 0) {
+        alert("오답이 없습니다!");
+        window.location.href = "menu.html";
+      } else if (quizData.length <= 3) {
+        alert("오답이 3개 이하군요! 🎉 축하해요!");
+        window.location.href = "menu.html";
+      } else {
+        startButton.style.display = "none";
+        loadQuiz();
+      }
     });
   </script>
 </body>
