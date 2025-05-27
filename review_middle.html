@@ -2,18 +2,53 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>오답노트 복습</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .quiz-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .quiz-box {
+      text-align: center;
+      max-width: 600px;
+      width: 90%;
+    }
+    .choices {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .choices button {
+      flex: 0 0 45%;
+      max-width: 45%;
+      font-size: 1rem;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+    #start-button {
+      margin-top: 20px;
+      padding: 12px 20px;
+      font-size: 1.2rem;
+      background-color: green;
+      color: white;
+      border: none;
+      border-radius: 8px;
+    }
+  </style>
 </head>
 <body>
   <div class="quiz-container">
     <div class="quiz-box">
-      <div class="question-count" id="question-count">1 / N</div>
-      <div class="question" id="question">오답 단어</div>
+      <h1 id="question">오답노트 복습</h1>
       <div class="choices" id="choices"></div>
-      <div class="pause-button" id="pause-button">⏸ 일시정지</div>
+      <button id="start-button">복습 시작</button>
     </div>
   </div>
 
@@ -21,14 +56,55 @@
     const saved = localStorage.getItem("middle_wrong");
     const quizData = saved ? JSON.parse(saved) : [];
 
-    if (!quizData || quizData.length === 0) {
-      alert("오답이 없습니다! 메인 메뉴로 이동합니다.");
-      window.location.href = "menu.html";
-    } else if (quizData.length <= 3) {
+    if (!quizData || quizData.length <= 3) {
       alert("오답이 3개 이하군요! 🎉 축하해요!");
       window.location.href = "menu.html";
     }
+
+    const questionEl = document.getElementById("question");
+    const choicesEl = document.getElementById("choices");
+    const startButton = document.getElementById("start-button");
+
+    function speak(text) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = "en-US";
+      speechSynthesis.speak(utterance);
+    }
+
+    function loadQuiz() {
+      let current = quizData[Math.floor(Math.random() * quizData.length)];
+      questionEl.textContent = current.word || current.idiom || "???";
+      choicesEl.innerHTML = "";
+
+      let correctMeaning = current.meaning;
+      let choices = [correctMeaning];
+
+      while (choices.length < 4) {
+        const choice = quizData[Math.floor(Math.random() * quizData.length)].meaning;
+        if (!choices.includes(choice)) {
+          choices.push(choice);
+        }
+      }
+
+      choices.sort(() => Math.random() - 0.5);
+      choices.forEach(choice => {
+        const btn = document.createElement("button");
+        btn.textContent = choice;
+        btn.onclick = () => {
+          btn.style.backgroundColor = choice === correctMeaning ? "#4CAF50" : "#f44336";
+          setTimeout(() => location.reload(), 1500);
+        };
+        choicesEl.appendChild(btn);
+      });
+
+      speak(questionEl.textContent);
+    }
+
+    startButton.addEventListener("click", () => {
+      document.activeElement.blur(); // prevent keyboard focus
+      startButton.style.display = "none";
+      loadQuiz();
+    });
   </script>
-  <script src="script_middle.js" defer></script>
 </body>
 </html>
