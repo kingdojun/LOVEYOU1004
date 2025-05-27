@@ -9,6 +9,12 @@ function speakWord(word) {
 }
 
 let rawData = JSON.parse(localStorage.getItem("wrongWords_middle3000")) || [];
+if (!Array.isArray(rawData) || rawData.length === 0) {
+  document.getElementById("question").innerText = "오답 데이터가 없습니다.";
+  document.getElementById("choices").innerHTML = "";
+  document.getElementById("timer").style.display = "none";
+  throw new Error("No wrongWords_middle3000 data found.");
+}
 console.log('오답 데이터 수:', rawData.length);
 console.log('오답 데이터 수:', rawData.length);
 let data = [];
