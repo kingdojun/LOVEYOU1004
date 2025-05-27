@@ -59,6 +59,12 @@ body {
   background-color: #e0e0e0;
 }
 
+.choice-btn:focus,
+.choice-btn:active {
+  outline: none;
+  background-color: #f0f0f0;
+}
+
 .pause-button {
   margin-top: 2rem;
   font-size: 1rem;
