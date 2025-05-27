@@ -338,11 +338,11 @@ function updateTimer() {
 }
 
 function markAnswer(_, correct) {
-  const buttons = document.querySelectorAll(".choice");
+  let buttons = document.querySelectorAll(".choice");
   buttons.forEach(b => {
     b.classList.remove("correct", "incorrect"); // 초기화
   });
-  const buttons = document.querySelectorAll(".choice");
+  let buttons = document.querySelectorAll(".choice");
   buttons.forEach(b => {
     if (b.innerText.trim() === correct.trim()) b.classList.add("correct");
   });
@@ -356,7 +356,7 @@ function markAnswer(_, correct) {
 
 function checkAnswer(selected, correct) {
   clearInterval(timerInterval);
-  const buttons = document.querySelectorAll(".choice");
+  let buttons = document.querySelectorAll(".choice");
   buttons.forEach(b => {
     if (b.innerText.trim() === correct.trim()) b.classList.add("correct");
     if (b.innerText.trim() === selected.trim() && selected.trim() !== correct.trim()) b.classList.add("incorrect");
@@ -435,6 +435,22 @@ function retryWrong() {
 
 quiz = shuffle(quizData).slice(0, 500);
 loadQuestion();
+</script>
+
+
+<script>
+console.log("🔍 스크립트 로딩 시작");
+
+if (typeof quizData !== "undefined") {
+  console.log("✅ quizData 로드됨:", quizData.length, "개");
+} else {
+  console.error("❌ quizData가 정의되지 않음");
+}
+
+setTimeout(() => {
+  let buttons = document.querySelectorAll(".choice");
+  console.log("✅ 현재 보기에 표시된 선택지 개수:", buttons.length);
+}, 1000);
 </script>
 
 </body>
