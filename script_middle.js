@@ -1,121 +1,91 @@
 
-let quiz = [];
-let current = 0;
-let score = 0;
-let paused = false;
-let timer;
-let wrongAnswers = [];
+let currentQuestion = 0;
+let correctCount = 0;
+let totalQuestions = 0;
+let isPaused = false;
 
-function shuffleArray(array) {
-  return array.sort(() => Math.random() - 0.5);
+const saved = JSON.parse(localStorage.getItem("wrongAnswers_middle") || "[]");
+let reviewData = [...saved];
+
+function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
 }
 
-function pickRandomQuizItems(data, count) {
-  return shuffleArray([...data]).slice(0, count);
-}
-
-function speakWord(word) {
-  try {
-    const utter = new SpeechSynthesisUtterance(word);
-    utter.lang = 'en-US';
-    utter.rate = 0.9;
-    speechSynthesis.speak(utter);
-  } catch (e) {
-    console.warn("TTS error", e);
-  }
+if (reviewData.length === 0) {
+    alert("오답이 없습니다!");
+    window.location.href = "menu.html";
+} else if (reviewData.length < 4) {
+    alert("오답이 3개 이하군요! 축하해요!");
+    window.location.href = "menu.html";
+} else {
+    shuffle(reviewData);
+    totalQuestions = reviewData.length;
+    showQuestion();
 }
 
 function showQuestion() {
-  if (current >= quiz.length) {
-    alert(`퀴즈 종료! 점수: ${score}/${quiz.length}`);
-    localStorage.setItem("middle_wrong", JSON.stringify(wrongAnswers));
-    location.href = 'menu.html';
-    return;
-  }
-
-  const q = quiz[current];
-  document.getElementById("question").textContent = q.word;
-  document.getElementById("question-count").textContent = `${current + 1} / ${quiz.length}`;
-  speakWord(q.word);
-
-  const choices = [q.meaning];
-  while (choices.length < 4) {
-    const randomMeaning = quizData[Math.floor(Math.random() * quizData.length)].meaning;
-    if (!choices.includes(randomMeaning)) choices.push(randomMeaning);
-  }
-  const shuffledChoices = shuffleArray(choices);
-
-  const container = document.getElementById("choices");
-  container.innerHTML = "";
-
-  shuffledChoices.forEach(choiceText => {
-    const btn = document.createElement("button");
-    btn.setAttribute("tabindex", "-1");
-    btn.textContent = choiceText;
-    btn.className = "choice-btn";
-
-    btn.onclick = () => {
-      btn.blur();
-      clearInterval(timer);
-      const allBtns = document.querySelectorAll(".choice-btn");
-      allBtns.forEach(b => { b.disabled = true; b.blur(); });
-
-      if (btn.textContent === q.meaning) {
-        btn.style.backgroundColor = "#A5D6A7";
-        handleAnswer(true);
-      } else {
-        btn.style.backgroundColor = "#EF9A9A";
-        const correctBtn = Array.from(allBtns).find(b => b.textContent === q.meaning);
-        if (correctBtn) correctBtn.style.backgroundColor = "#A5D6A7";
-        wrongAnswers.push(quiz[current]);
-        localStorage.setItem("middle_wrong", JSON.stringify(wrongAnswers));
-        handleAnswer(false);
-      }
-    };
-    container.appendChild(btn);
-  });
-
-  startCountdown();
-}
-
-function handleAnswer(correct) {
-  if (correct) score++;
-  else {
-    wrongAnswers.push(quiz[current]);
-    localStorage.setItem("middle_wrong", JSON.stringify(wrongAnswers));
-  }
-  setTimeout(() => {
-    current++;
-    showQuestion();
-  }, 1800);
-}
-
-function startCountdown() {
-  let count = 5;
-  const display = document.getElementById("question-count");
-  clearInterval(timer);
-  timer = setInterval(() => {
-    if (paused) return;
-    count--;
-    display.textContent = `${current + 1} / ${quiz.length} ⏳ ${count}`;
-    if (count === 0) {
-      clearInterval(timer);
-      const correctBtn = Array.from(document.querySelectorAll(".choice-btn")).find(b => b.textContent === quiz[current].meaning);
-      if (correctBtn) correctBtn.style.backgroundColor = '#A5D6A7';
-      setTimeout(() => {
-        wrongAnswers.push(quiz[current]);
-        localStorage.setItem("middle_wrong", JSON.stringify(wrongAnswers));
-        handleAnswer(false);
-      }, 1000);
+    if (currentQuestion >= reviewData.length) {
+        alert("복습이 끝났습니다!");
+        window.location.href = "menu.html";
+        return;
     }
-  }, 1000);
+
+    const wordObj = reviewData[currentQuestion];
+    const choices = generateChoices(wordObj.meaning);
+    const questionElement = document.getElementById("question");
+    const choicesContainer = document.getElementById("choices");
+    const countElement = document.getElementById("count");
+
+    questionElement.textContent = wordObj.word;
+    countElement.textContent = `${currentQuestion + 1} / ${totalQuestions}`;
+    choicesContainer.innerHTML = "";
+
+    speak(wordObj.word);
+
+    choices.forEach((choice, index) => {
+        const button = document.createElement("button");
+        button.className = "choice-button";
+        button.textContent = choice;
+        button.onclick = () => {
+            if (choice === wordObj.meaning) {
+                button.style.backgroundColor = "#4CAF50";
+                correctCount++;
+            } else {
+                button.style.backgroundColor = "#f44336";
+                const correctButton = [...choicesContainer.children].find(btn => btn.textContent === wordObj.meaning);
+                if (correctButton) correctButton.style.backgroundColor = "#4CAF50";
+            }
+            setTimeout(() => {
+                currentQuestion++;
+                showQuestion();
+            }, 1200);
+        };
+        choicesContainer.appendChild(button);
+    });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  quiz = pickRandomQuizItems(quizData, 300);
-  document.getElementById("pause-button").onclick = () => {
-    paused = !paused;
-    document.getElementById("pause-button").textContent = paused ? "▶ 재개" : "⏸ 일시정지";
-  };
-  showQuestion();
-});
+function generateChoices(correct) {
+    const meanings = reviewData.map(item => item.meaning);
+    const uniqueMeanings = [...new Set(meanings.filter(m => m !== correct))];
+    shuffle(uniqueMeanings);
+    const choices = uniqueMeanings.slice(0, 3);
+    choices.push(correct);
+    shuffle(choices);
+    return choices;
+}
+
+function speak(text) {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = "en-US";
+    speechSynthesis.cancel();
+    speechSynthesis.speak(utterance);
+}
+
+function togglePause() {
+    isPaused = !isPaused;
+    const pauseBtn = document.getElementById("pauseBtn");
+    pauseBtn.textContent = isPaused ? "▶️" : "⏸";
+}
