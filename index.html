@@ -1,0 +1,42 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>중학영단어 3000 로그인</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 100px;
+    }
+    input[type="password"] {
+      padding: 10px;
+      font-size: 16px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin-left: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h2>비밀번호 입력</h2>
+  <input type="password" id="password" placeholder="비밀번호 입력">
+  <button onclick="login()">로그인</button>
+
+  <script>
+    const password = "1004";  // 작은딸 비밀번호 고정
+
+    function login() {
+      const input = document.getElementById("password").value;
+      if (input === password) {
+        location.href = "menu.html";
+      } else {
+        alert("비밀번호가 틀렸습니다.");
+      }
+    }
+  </script>
+</body>
+</html>
