@@ -45,6 +45,23 @@
   }
 </script>
 <script src="script_middle.js" defer></script>
+
+<button onclick="startReview()">복습 시작</button>
+<script>
+function startReview() {
+  const saved = localStorage.getItem("middle_wrong");
+  const quizData = saved ? JSON.parse(saved) : [];
+
+  if (!quizData || quizData.length === 0) {
+    alert("오답이 없습니다! 메인 메뉴로 이동합니다.");
+    window.location.href = "menu.html";
+    return;
+  }
+
+  startQuiz(quizData); // 실제 퀴즈 시작 함수 호출
+}
+</script>
+
 </body>
 
 </html>
