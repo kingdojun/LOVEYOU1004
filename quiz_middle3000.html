@@ -4,6 +4,77 @@
 <head>
 
   <style>
+
+body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to right, #ffffff, #eef2f3);
+  font-family: 'Segoe UI', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  text-align: center;
+}
+#question {
+  font-size: 40px;
+  font-weight: 600;
+  color: #34495e;
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
+#choices {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  max-width: 600px;
+}
+.choice {
+  background: #fff;
+  border: 2px solid #bdc3c7;
+  padding: 16px 24px;
+  border-radius: 10px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: 0.2s;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+.choice:hover {
+  background-color: #f4f4f4;
+}
+.correct {
+  background-color: #e0f8e0 !important;
+  border-color: #2ecc71 !important;
+}
+.incorrect {
+  background-color: #fbeaea !important;
+  border-color: #e74c3c !important;
+}
+#pauseBtn {
+  margin-top: 30px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: none;
+  background-color: #dcdde1;
+  cursor: pointer;
+  font-size: 16px;
+}
+#counter {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  font-size: 16px;
+  color: #555;
+}
+#timer {
+  font-size: 32px;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 10px;
+}
+
     body {
       margin: 0;
       padding: 0;
