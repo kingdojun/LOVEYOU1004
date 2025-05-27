@@ -1,4 +1,13 @@
 
+function speakWord(word) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel(); // 중복 방지
+  const utterance = new SpeechSynthesisUtterance(word);
+  utterance.lang = 'en-US';
+  utterance.rate = 0.9;
+  window.speechSynthesis.speak(utterance);
+}
+
 let rawData = JSON.parse(localStorage.getItem("wrongWords_middle3000")) || [];
 console.log('오답 데이터 수:', rawData.length);
 console.log('오답 데이터 수:', rawData.length);
@@ -65,6 +74,7 @@ function showQuestion() {
   const item = data[current];
   document.getElementById("counter").innerText = `${current + 1}/${data.length}`;
   document.getElementById("question").innerText = item.word;
+  speakWord(item.word);
 
   const choicesDiv = document.getElementById("choices");
   choicesDiv.innerHTML = "";
