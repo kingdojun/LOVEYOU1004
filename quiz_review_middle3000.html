@@ -258,6 +258,120 @@ body {
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>1300 영단어 퀴즈</title>
   <link rel="stylesheet" href="" />
+
+
+<script>
+let currentIndex = 0;
+let quizData = JSON.parse(localStorage.getItem("wrongWords_middle3000") || "[]");
+
+if (!quizData || quizData.length === 0) {
+  document.getElementById("word").innerText = "오답 기록이 없습니다.";
+  document.getElementById("choices").innerHTML = "";
+  document.getElementById("count").innerText = "0/0";
+  document.getElementById("timer").style.display = "none";
+} else {
+  showQuestion();
+}
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function speakWord(word) {
+  if (window.speechSynthesis) {
+    const utter = new SpeechSynthesisUtterance(word);
+    utter.lang = "en-US";
+    utter.rate = 0.9;
+    utter.pitch = 1;
+    speechSynthesis.speak(utter);
+  }
+}
+
+function showQuestion() {
+  if (currentIndex >= quizData.length) {
+    document.getElementById("word").innerText = "오답 복습 완료!";
+    document.getElementById("choices").innerHTML = "";
+    document.getElementById("count").innerText = quizData.length + "/" + quizData.length;
+    document.getElementById("timer").style.display = "none";
+    return;
+  }
+
+  const current = quizData[currentIndex];
+  document.getElementById("word").innerText = current.word;
+  document.getElementById("count").innerText = (currentIndex + 1) + "/" + quizData.length;
+
+  // 단어 발음 (사용자 상호작용 이후만 허용됨)
+  setTimeout(() => speakWord(current.word), 100);
+
+  const choices = [current.meaning];
+  const allMeanings = quizData.map(q => q.meaning).filter(m => m !== current.meaning);
+  shuffle(allMeanings);
+  while (choices.length < 4 && allMeanings.length > 0) {
+    const m = allMeanings.pop();
+    if (!choices.includes(m)) choices.push(m);
+  }
+  shuffle(choices);
+
+  const container = document.getElementById("choices");
+  container.innerHTML = "";
+  for (const choice of choices) {
+    const btn = document.createElement("div");
+    btn.className = "choice";
+    btn.innerText = choice;
+    btn.setAttribute("style", "display:block;width:45%;max-width:45%;font-size:15px;padding:10px 12px;box-sizing:border-box;");
+    btn.onclick = () => handleAnswer(choice, current.meaning);
+    container.appendChild(btn);
+  }
+
+  let time = 5;
+  const timer = document.getElementById("timer");
+  timer.innerText = time;
+  const interval = setInterval(() => {
+    time--;
+    timer.innerText = time;
+    if (time <= 0) {
+      clearInterval(interval);
+      showAnswer(current.meaning);
+    }
+  }, 1000);
+}
+
+function handleAnswer(selected, correct) {
+  const buttons = document.querySelectorAll(".choice");
+  buttons.forEach(btn => {
+    btn.classList.remove("correct", "incorrect");
+    if (btn.innerText.trim() === correct.trim()) {
+      btn.classList.add("correct");
+    } else if (btn.innerText.trim() === selected.trim()) {
+      btn.classList.add("incorrect");
+    }
+  });
+  setTimeout(() => {
+    currentIndex++;
+    showQuestion();
+  }, 1000);
+}
+
+function showAnswer(correct) {
+  const buttons = document.querySelectorAll(".choice");
+  buttons.forEach(btn => {
+    btn.classList.remove("correct", "incorrect");
+    if (btn.innerText.trim() === correct.trim()) {
+      btn.classList.add("correct");
+    }
+  });
+  setTimeout(() => {
+    currentIndex++;
+    showQuestion();
+  }, 1000);
+}
+</script>
+
+
 </head>
 <body>
   <div id="counter">문제 0/0</div>

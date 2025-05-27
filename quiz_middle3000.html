@@ -304,6 +304,17 @@ body {
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>중학 영단어 3000 퀴즈</title>
   <link rel="stylesheet" href="" />
+
+<script>
+function speakWord(text) {
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = "en-US";
+  utterance.rate = 0.9;
+  utterance.pitch = 1.0;
+  speechSynthesis.speak(utterance);
+}
+</script>
+
 </head>
 <body>
   <div id="counter">문제 0/0</div>
