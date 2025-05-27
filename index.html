@@ -6,36 +6,52 @@
   <title>중학영단어 3000 로그인</title>
   <style>
     body {
+      font-family: Arial, sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
-      background-color: #f9f9f9;
       margin: 0;
-      font-family: sans-serif;
+      background: linear-gradient(to right, #e3f2fd, #fce4ec);
     }
     .login-container {
       text-align: center;
-      border: 2px solid #ccc;
-      padding: 40px;
-      border-radius: 12px;
-      background-color: white;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      background: white;
+      padding: 60px;
+      border-radius: 18px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+    h2 {
+      font-size: 36px;
+      margin-bottom: 40px;
+      color: #2c3e50;
     }
     input[type="password"] {
-      padding: 10px;
-      font-size: 16px;
+      padding: 20px;
+      font-size: 22px;
+      width: 280px;
+      border: 2px solid #ccc;
+      border-radius: 10px;
     }
     button {
-      padding: 10px 20px;
-      font-size: 16px;
-      margin-left: 10px;
+      padding: 16px 28px;
+      font-size: 22px;
+      margin-left: 12px;
+      border: none;
+      background-color: #3498db;
+      color: white;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    button:hover {
+      background-color: #2980b9;
     }
   </style>
 </head>
 <body>
   <div class="login-container">
-    <h2>비밀번호 입력</h2>
+    <h2>비밀번호를 입력하세요</h2>
     <input type="password" id="password" placeholder="비밀번호 입력">
     <button onclick="login()">로그인</button>
   </div>
