@@ -4,7 +4,6 @@ let current = 0;
 let score = 0;
 let paused = false;
 let timer;
-let shuffled = [];
 let wrongAnswers = [];
 
 function shuffleArray(array) {
@@ -12,15 +11,18 @@ function shuffleArray(array) {
 }
 
 function pickRandomQuizItems(data, count) {
-  const shuffled = shuffleArray([...data]);
-  return shuffled.slice(0, count);
+  return shuffleArray([...data]).slice(0, count);
 }
 
 function speakWord(word) {
-  const utter = new SpeechSynthesisUtterance(word);
-  utter.lang = 'en-US';
-  utter.rate = 0.9;
-  speechSynthesis.speak(utter);
+  try {
+    const utter = new SpeechSynthesisUtterance(word);
+    utter.lang = 'en-US';
+    utter.rate = 0.9;
+    speechSynthesis.speak(utter);
+  } catch (e) {
+    console.warn("TTS error", e);
+  }
 }
 
 function showQuestion() {
@@ -38,31 +40,42 @@ function showQuestion() {
 
   const choices = [q.meaning];
   while (choices.length < 4) {
-    const random = quizData[Math.floor(Math.random() * quizData.length)].meaning;
-    if (!choices.includes(random)) choices.push(random);
+    const randomMeaning = quizData[Math.floor(Math.random() * quizData.length)].meaning;
+    if (!choices.includes(randomMeaning)) choices.push(randomMeaning);
   }
   const shuffledChoices = shuffleArray(choices);
 
-  const choiceContainer = document.getElementById("choices");
-  choiceContainer.innerHTML = "";
-  shuffledChoices.forEach(choice => {
+  const container = document.getElementById("choices");
+  container.innerHTML = "";
+
+  shuffledChoices.forEach(choiceText => {
     const btn = document.createElement("button");
-    btn.textContent = choice;
+    btn.textContent = choiceText;
     btn.className = "choice-btn";
-    btn.onclick = () => handleAnswer(choice === q.meaning);
-    choiceContainer.appendChild(btn);
+    btn.onclick = () => {
+      clearInterval(timer);
+      const allBtns = document.querySelectorAll(".choice-btn");
+      allBtns.forEach(b => b.disabled = true);
+
+      if (btn.textContent === q.meaning) {
+        btn.style.backgroundColor = "#A5D6A7";
+        handleAnswer(true);
+      } else {
+        btn.style.backgroundColor = "#EF9A9A";
+        const correctBtn = Array.from(allBtns).find(b => b.textContent === q.meaning);
+        if (correctBtn) correctBtn.style.backgroundColor = "#A5D6A7";
+        handleAnswer(false);
+      }
+    };
+    container.appendChild(btn);
   });
 
   startCountdown();
 }
 
 function handleAnswer(correct) {
-  clearTimeout(timer);
-  if (correct) {
-    score++;
-  } else {
-    wrongAnswers.push(quiz[current]);
-  }
+  if (correct) score++;
+  else wrongAnswers.push(quiz[current]);
   setTimeout(() => {
     current++;
     showQuestion();
@@ -71,15 +84,15 @@ function handleAnswer(correct) {
 
 function startCountdown() {
   let count = 5;
-  const countDisplay = document.getElementById("question-count");
+  const display = document.getElementById("question-count");
+  clearInterval(timer);
   timer = setInterval(() => {
     if (paused) return;
-    if (count === 1) {
+    count--;
+    display.textContent = `${current + 1} / ${quiz.length} ⏳ ${count}`;
+    if (count === 0) {
       clearInterval(timer);
       handleAnswer(false);
-    } else {
-      count--;
-      countDisplay.textContent = `${current + 1} / ${quiz.length} ⏳ ${count}`;
     }
   }, 1000);
 }
