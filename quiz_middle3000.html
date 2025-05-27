@@ -340,6 +340,10 @@ function updateTimer() {
 function markAnswer(_, correct) {
   const buttons = document.querySelectorAll(".choice");
   buttons.forEach(b => {
+    b.classList.remove("correct", "incorrect"); // 초기화
+  });
+  const buttons = document.querySelectorAll(".choice");
+  buttons.forEach(b => {
     if (b.innerText.trim() === correct.trim()) b.classList.add("correct");
   });
   wrongAnswers.push(quiz[current]);
