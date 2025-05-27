@@ -3,71 +3,62 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>로그인</title>
+  <title>중학 영단어 퀴즈</title>
   <style>
     body {
       margin: 0;
       padding: 0;
-      font-family: 'Arial', sans-serif;
-      background-color: #f4f4f4;
+      height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      font-family: 'Arial', sans-serif;
+      background-color: #f0f0f0;
+      flex-direction: column;
     }
-    .login-container {
+    .container {
       text-align: center;
-      background: white;
-      padding: 2rem;
-      border-radius: 15px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      width: 90%;
-      max-width: 400px;
     }
     h1 {
-      font-size: 2rem;
-      margin-bottom: 1.5rem;
+      font-size: 3em;
+      margin-bottom: 2rem;
       color: #333;
     }
-    input[type="password"], button {
-      width: 80%;
-      padding: 0.8rem;
-      margin: 0.5rem auto;
+    .menu-button {
       display: block;
-      font-size: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-    }
-    button {
+      width: 300px;
+      padding: 20px;
+      margin: 20px auto;
+      font-size: 1.5em;
       background-color: #4CAF50;
       color: white;
       border: none;
+      border-radius: 12px;
       cursor: pointer;
+      transition: background-color 0.3s;
     }
-    button:hover {
+    .menu-button:hover {
       background-color: #45a049;
+    }
+    .menu-button.red {
+      background-color: #e53935;
+    }
+    .menu-button.red:hover {
+      background-color: #c62828;
+    }
+    .footer {
+      margin-top: 2rem;
+      font-size: 0.9rem;
+      color: #555;
     }
   </style>
 </head>
 <body>
-  <div class="login-container">
-    <h1>로그인</h1>
-    <input type="password" id="password" placeholder="비밀번호 입력">
-    <button onclick="login()">로그인</button>
+  <div class="container">
+    <h1>비밀번호</h1>
+    <button class="menu-button" onclick="location.href='https://kingdojun.github.io/LOVEYOU1004/quiz_middle.html'">중학 영단어 1800</button>
+    <button class="menu-button red" onclick="location.href='https://kingdojun.github.io/LOVEYOU1004/review_middle.html'">오답노트</button>
   </div>
-
-  <script>
-    const correctPassword = "1004";
-
-    function login() {
-      const pw = document.getElementById("password").value;
-      if (pw === correctPassword) {
-        localStorage.setItem("current_user", "default_user");
-        location.href = "menu.html";
-      } else {
-        alert("비밀번호가 틀렸어요!");
-      }
-    }
-  </script>
+  <div class="footer">© 2025 Yesong Kim · Class 2-5 · Version 1.0</div>
 </body>
 </html>
