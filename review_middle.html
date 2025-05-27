@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>오답노트 복습</title>
+  <title>중학 영단어 오답노트</title>
   <link rel="stylesheet" href="style.css">
+  <script defer src="script_middle.js"></script>
 </head>
 <body>
   <div class="quiz-container">
@@ -15,53 +16,5 @@
       <div class="pause-button" id="pause-button">⏸ 일시정지</div>
     </div>
   </div>
-
-  <script>
-  const saved = localStorage.getItem("middle_wrong");
-  const quizData = saved ? JSON.parse(saved) : [];
-
-  if (!quizData || quizData.length <= 3) {
-    alert("오답이 3개 이하군요! 🎉 축하해요!");
-    window.location.href = "menu.html";
-  } else {
-  }
-</script>
-    const saved = localStorage.getItem("middle_wrong");
-    const quizData = saved ? JSON.parse(saved) : [];
-
-    if (!quizData || quizData.length === 0) {
-      alert("오답이 없습니다! 메인 메뉴로 이동합니다.");
-      window.location.href = "menu.html";
-    }
-  </script>
-
-<script>
-  const saved = localStorage.getItem("middle_wrong");
-  const quizData = saved ? JSON.parse(saved) : [];
-
-  if (!quizData || quizData.length <= 3) {
-    alert("오답이 3개 이하군요! 🎉 축하해요!");
-    window.location.href = "menu.html";
-  }
-</script>
-<script src="script_middle.js" defer></script>
-
-<button onclick="startReview()">복습 시작</button>
-<script>
-function startReview() {
-  const saved = localStorage.getItem("middle_wrong");
-  const quizData = saved ? JSON.parse(saved) : [];
-
-  if (!quizData || quizData.length === 0) {
-    alert("오답이 없습니다! 메인 메뉴로 이동합니다.");
-    window.location.href = "menu.html";
-    return;
-  }
-
-  startQuiz(quizData); // 실제 퀴즈 시작 함수 호출
-}
-</script>
-
 </body>
-
 </html>

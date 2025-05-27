@@ -4,6 +4,7 @@ let current = 0;
 let score = 0;
 let paused = false;
 let timer;
+let shuffled = [];
 let wrongAnswers = [];
 
 function shuffleArray(array) {
@@ -11,18 +12,15 @@ function shuffleArray(array) {
 }
 
 function pickRandomQuizItems(data, count) {
-  return shuffleArray([...data]).slice(0, count);
+  const shuffled = shuffleArray([...data]);
+  return shuffled.slice(0, count);
 }
 
 function speakWord(word) {
-  try {
-    const utter = new SpeechSynthesisUtterance(word);
-    utter.lang = 'en-US';
-    utter.rate = 0.9;
-    speechSynthesis.speak(utter);
-  } catch (e) {
-    console.warn("TTS error", e);
-  }
+  const utter = new SpeechSynthesisUtterance(word);
+  utter.lang = 'en-US';
+  utter.rate = 0.9;
+  speechSynthesis.speak(utter);
 }
 
 function showQuestion() {
@@ -40,73 +38,48 @@ function showQuestion() {
 
   const choices = [q.meaning];
   while (choices.length < 4) {
-    const randomMeaning = quizData[Math.floor(Math.random() * quizData.length)].meaning;
-    if (!choices.includes(randomMeaning)) choices.push(randomMeaning);
+    const random = quizData[Math.floor(Math.random() * quizData.length)].meaning;
+    if (!choices.includes(random)) choices.push(random);
   }
   const shuffledChoices = shuffleArray(choices);
 
-  const container = document.getElementById("choices");
-  container.innerHTML = "";
-
-  shuffledChoices.forEach(choiceText => {
+  const choiceContainer = document.getElementById("choices");
+  choiceContainer.innerHTML = "";
+  shuffledChoices.forEach(choice => {
     const btn = document.createElement("button");
-    btn.setAttribute("tabindex", "-1");
-    btn.textContent = choiceText;
+    btn.textContent = choice;
     btn.className = "choice-btn";
-
-    btn.onclick = () => {
-      btn.blur();
-      clearInterval(timer);
-      const allBtns = document.querySelectorAll(".choice-btn");
-      allBtns.forEach(b => { b.disabled = true; b.blur(); });
-
-      if (btn.textContent === q.meaning) {
-        btn.style.backgroundColor = "#A5D6A7";
-        handleAnswer(true);
-      } else {
-        btn.style.backgroundColor = "#EF9A9A";
-        const correctBtn = Array.from(allBtns).find(b => b.textContent === q.meaning);
-        if (correctBtn) correctBtn.style.backgroundColor = "#A5D6A7";
-        wrongAnswers.push(quiz[current]);
-        localStorage.setItem("middle_wrong", JSON.stringify(wrongAnswers));
-        handleAnswer(false);
-      }
-    };
-    container.appendChild(btn);
+    btn.onclick = () => handleAnswer(choice === q.meaning);
+    choiceContainer.appendChild(btn);
   });
 
   startCountdown();
 }
 
 function handleAnswer(correct) {
-  if (correct) score++;
-  else {
+  clearTimeout(timer);
+  if (correct) {
+    score++;
+  } else {
     wrongAnswers.push(quiz[current]);
-    localStorage.setItem("middle_wrong", JSON.stringify(wrongAnswers));
   }
   setTimeout(() => {
     current++;
     showQuestion();
-  }, 1800);
+  }, 1000);
 }
 
 function startCountdown() {
   let count = 5;
-  const display = document.getElementById("question-count");
-  clearInterval(timer);
+  const countDisplay = document.getElementById("question-count");
   timer = setInterval(() => {
     if (paused) return;
-    count--;
-    display.textContent = `${current + 1} / ${quiz.length} ⏳ ${count}`;
-    if (count === 0) {
+    if (count === 1) {
       clearInterval(timer);
-      const correctBtn = Array.from(document.querySelectorAll(".choice-btn")).find(b => b.textContent === quiz[current].meaning);
-      if (correctBtn) correctBtn.style.backgroundColor = '#A5D6A7';
-      setTimeout(() => {
-        wrongAnswers.push(quiz[current]);
-        localStorage.setItem("middle_wrong", JSON.stringify(wrongAnswers));
-        handleAnswer(false);
-      }, 1000);
+      handleAnswer(false);
+    } else {
+      count--;
+      countDisplay.textContent = `${current + 1} / ${quiz.length} ⏳ ${count}`;
     }
   }, 1000);
 }
