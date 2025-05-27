@@ -1,69 +1,121 @@
 
-document.addEventListener("DOMContentLoaded", function () {
-  const saved = localStorage.getItem("middle_wrong");
-  const quizData = saved ? JSON.parse(saved) : [];
+let quiz = [];
+let current = 0;
+let score = 0;
+let paused = false;
+let timer;
+let wrongAnswers = [];
 
-  if (!quizData || quizData.length === 0) {
-    alert("오답이 없습니다!");
-    window.location.href = "menu.html";
+function shuffleArray(array) {
+  return array.sort(() => Math.random() - 0.5);
+}
+
+function pickRandomQuizItems(data, count) {
+  return shuffleArray([...data]).slice(0, count);
+}
+
+function speakWord(word) {
+  try {
+    const utter = new SpeechSynthesisUtterance(word);
+    utter.lang = 'en-US';
+    utter.rate = 0.9;
+    speechSynthesis.speak(utter);
+  } catch (e) {
+    console.warn("TTS error", e);
+  }
+}
+
+function showQuestion() {
+  if (current >= quiz.length) {
+    alert(`퀴즈 종료! 점수: ${score}/${quiz.length}`);
+    localStorage.setItem("middle_wrong", JSON.stringify(wrongAnswers));
+    location.href = 'menu.html';
     return;
-  } else if (quizData.length < 4) {
-    alert("오답이 3개 이하군요! 축하해요!");
-    window.location.href = "menu.html";
-    return;
   }
 
-  let current = 0;
-  let paused = false;
-  const total = quizData.length;
-  const counter = document.getElementById("counter");
-  const question = document.getElementById("question");
-  const pauseBtn = document.getElementById("pauseBtn");
+  const q = quiz[current];
+  document.getElementById("question").textContent = q.word;
+  document.getElementById("question-count").textContent = `${current + 1} / ${quiz.length}`;
+  speakWord(q.word);
 
-  function shuffle(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
+  const choices = [q.meaning];
+  while (choices.length < 4) {
+    const randomMeaning = quizData[Math.floor(Math.random() * quizData.length)].meaning;
+    if (!choices.includes(randomMeaning)) choices.push(randomMeaning);
   }
+  const shuffledChoices = shuffleArray(choices);
 
-  function speak(text) {
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = "en-US";
-    speechSynthesis.speak(utterance);
-  }
+  const container = document.getElementById("choices");
+  container.innerHTML = "";
 
-  function showNext() {
-    if (current >= total) {
-      alert("복습이 끝났어요!");
-      window.location.href = "menu.html";
-      return;
-    }
+  shuffledChoices.forEach(choiceText => {
+    const btn = document.createElement("button");
+    btn.setAttribute("tabindex", "-1");
+    btn.textContent = choiceText;
+    btn.className = "choice-btn";
 
-    const wordData = quizData[current];
-    const correct = wordData.meaning;
-    const word = wordData.word;
+    btn.onclick = () => {
+      btn.blur();
+      clearInterval(timer);
+      const allBtns = document.querySelectorAll(".choice-btn");
+      allBtns.forEach(b => { b.disabled = true; b.blur(); });
 
-    counter.textContent = (current + 1) + " / " + total;
-    question.textContent = word;
-    speak(word);
-
-    current++;
-    if (!paused) {
-      setTimeout(showNext, 5000);
-    }
-  }
-
-  pauseBtn.addEventListener("click", () => {
-    paused = !paused;
-    pauseBtn.textContent = paused ? "▶️ 다시시작" : "⏸ 일시정지";
-    if (!paused) {
-      showNext();
-    }
+      if (btn.textContent === q.meaning) {
+        btn.style.backgroundColor = "#A5D6A7";
+        handleAnswer(true);
+      } else {
+        btn.style.backgroundColor = "#EF9A9A";
+        const correctBtn = Array.from(allBtns).find(b => b.textContent === q.meaning);
+        if (correctBtn) correctBtn.style.backgroundColor = "#A5D6A7";
+        wrongAnswers.push(quiz[current]);
+        localStorage.setItem("middle_wrong", JSON.stringify(wrongAnswers));
+        handleAnswer(false);
+      }
+    };
+    container.appendChild(btn);
   });
 
-  shuffle(quizData);
-  showNext();
+  startCountdown();
+}
+
+function handleAnswer(correct) {
+  if (correct) score++;
+  else {
+    wrongAnswers.push(quiz[current]);
+    localStorage.setItem("middle_wrong", JSON.stringify(wrongAnswers));
+  }
+  setTimeout(() => {
+    current++;
+    showQuestion();
+  }, 1800);
+}
+
+function startCountdown() {
+  let count = 5;
+  const display = document.getElementById("question-count");
+  clearInterval(timer);
+  timer = setInterval(() => {
+    if (paused) return;
+    count--;
+    display.textContent = `${current + 1} / ${quiz.length} ⏳ ${count}`;
+    if (count === 0) {
+      clearInterval(timer);
+      const correctBtn = Array.from(document.querySelectorAll(".choice-btn")).find(b => b.textContent === quiz[current].meaning);
+      if (correctBtn) correctBtn.style.backgroundColor = '#A5D6A7';
+      setTimeout(() => {
+        wrongAnswers.push(quiz[current]);
+        localStorage.setItem("middle_wrong", JSON.stringify(wrongAnswers));
+        handleAnswer(false);
+      }, 1000);
+    }
+  }, 1000);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  quiz = pickRandomQuizItems(quizData, 300);
+  document.getElementById("pause-button").onclick = () => {
+    paused = !paused;
+    document.getElementById("pause-button").textContent = paused ? "▶ 재개" : "⏸ 일시정지";
+  };
+  showQuestion();
 });

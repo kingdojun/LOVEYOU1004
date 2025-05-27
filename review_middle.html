@@ -1,60 +1,50 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>오답노트 복습</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: "Apple SD Gothic Neo", sans-serif;
-      background-color: #f4f4f4;
-    }
-    .quiz-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    .quiz-box {
-      background: white;
-      padding: 2rem;
-      border-radius: 20px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      text-align: center;
-      width: 80%;
-      max-width: 400px;
-    }
-    .counter {
-      font-size: 1.2rem;
-      color: #555;
-    }
-    .question {
-      font-size: 2rem;
-      font-weight: bold;
-      margin: 1rem 0;
-    }
-    .pause-button {
-      background: #444;
-      color: white;
-      border: none;
-      padding: 0.6rem 1.2rem;
-      font-size: 1rem;
-      border-radius: 10px;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="quiz-container">
     <div class="quiz-box">
-      <div class="counter" id="counter">1 / N</div>
+      <div class="question-count" id="question-count">1 / N</div>
       <div class="question" id="question">오답 단어</div>
-      <button class="pause-button" id="pauseBtn">⏸ 일시정지</button>
+      <div class="choices" id="choices"></div>
+      <div class="pause-button" id="pause-button">⏸ 일시정지</div>
     </div>
   </div>
 
-  <script src="script_middle.js"></script>
+  <script>
+  const saved = localStorage.getItem("middle_wrong");
+  const quizData = saved ? JSON.parse(saved) : [];
+
+  if (!quizData || quizData.length <= 3) {
+    alert("오답이 3개 이하군요! 🎉 축하해요!");
+    window.location.href = "menu.html";
+  } else {
+  }
+</script>
+    const saved = localStorage.getItem("middle_wrong");
+    const quizData = saved ? JSON.parse(saved) : [];
+
+    if (!quizData || quizData.length === 0) {
+      alert("오답이 없습니다! 메인 메뉴로 이동합니다.");
+      window.location.href = "menu.html";
+    }
+  </script>
+
+<script>
+  const saved = localStorage.getItem("middle_wrong");
+  const quizData = saved ? JSON.parse(saved) : [];
+
+  if (!quizData || quizData.length <= 3) {
+    alert("오답이 3개 이하군요! 🎉 축하해요!");
+    window.location.href = "menu.html";
+  }
+</script>
+<script src="script_middle.js" defer></script>
 </body>
+
 </html>
