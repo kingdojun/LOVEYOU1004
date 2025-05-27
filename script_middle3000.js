@@ -96,7 +96,27 @@ function showQuestion() {
 
 function nextQuestion() {
   current = (current + 1) % data.length;
+  
+  // reset styles
+  const choicesDiv = document.getElementById("choices");
+  if (choicesDiv) {
+    [...choicesDiv.children].forEach(el => {
+      el.classList.remove("correct", "incorrect");
+      el.style.backgroundColor = "";
+      el.style.borderColor = "";
+    });
+  }
   showQuestion();
 }
 
-showQuestion();
+
+  // reset styles
+  const choicesDiv = document.getElementById("choices");
+  if (choicesDiv) {
+    [...choicesDiv.children].forEach(el => {
+      el.classList.remove("correct", "incorrect");
+      el.style.backgroundColor = "";
+      el.style.borderColor = "";
+    });
+  }
+  showQuestion();
