@@ -28,18 +28,26 @@ body {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 20px;
   max-width: 600px;
 }
 .choice {
+  flex: 0 0 45%;
+  max-width: 45%;
   background: #fff;
   border: 2px solid #bdc3c7;
-  padding: 16px 24px;
-  border-radius: 10px;
-  font-size: 18px;
+  padding: 14px 22px;
+  border-radius: 14px;
   cursor: pointer;
-  transition: 0.2s;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  font-size: 18px;
+  text-align: center;
+  margin: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  transition: all 0.2s;
 }
 .choice:hover {
   background-color: #f4f4f4;
@@ -111,6 +119,10 @@ body {
     }
 
     #choices {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
@@ -120,15 +132,19 @@ body {
     }
 
     .choice {
-      background: #ffffff;
-      border: 2px solid #bdc3c7;
-      padding: 14px 22px;
-      border-radius: 14px;
-      cursor: pointer;
-      font-size: 18px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-      transition: all 0.2s;
-    }
+  flex: 0 0 45%;
+  max-width: 45%;
+  background: #fff;
+  border: 2px solid #bdc3c7;
+  padding: 14px 22px;
+  border-radius: 14px;
+  cursor: pointer;
+  font-size: 18px;
+  text-align: center;
+  margin: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  transition: all 0.2s;
+}
 
     .choice:hover {
       background-color: #f0f0f0;
@@ -153,7 +169,35 @@ body {
       cursor: pointer;
       margin-top: 15px;
     }
-  </style>
+  
+#choices {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px 24px;
+  max-width: 400px;
+  margin: 0 auto 30px;
+}
+.choice {
+  flex: 0 0 45%;
+  max-width: 45%;
+  background: #fff;
+  border: 2px solid #bdc3c7;
+  padding: 14px 22px;
+  border-radius: 14px;
+  cursor: pointer;
+  font-size: 18px;
+  text-align: center;
+  margin: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  transition: all 0.2s;
+}
+
+</style>
 
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
