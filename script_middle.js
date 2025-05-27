@@ -50,8 +50,10 @@ function showQuestion() {
 
   shuffledChoices.forEach(choiceText => {
     const btn = document.createElement("button");
+    btn.setAttribute("tabindex", "-1");
     btn.textContent = choiceText;
     btn.className = "choice-btn";
+
     btn.onclick = () => {
       btn.blur();
       clearInterval(timer);
@@ -66,8 +68,8 @@ function showQuestion() {
         const correctBtn = Array.from(allBtns).find(b => b.textContent === q.meaning);
         if (correctBtn) correctBtn.style.backgroundColor = "#A5D6A7";
         wrongAnswers.push(quiz[current]);
-      localStorage.setItem("middle_wrong", JSON.stringify(wrongAnswers));
-      handleAnswer(false);
+        localStorage.setItem("middle_wrong", JSON.stringify(wrongAnswers));
+        handleAnswer(false);
       }
     };
     container.appendChild(btn);
@@ -78,12 +80,14 @@ function showQuestion() {
 
 function handleAnswer(correct) {
   if (correct) score++;
-  else wrongAnswers.push(quiz[current]);
-  localStorage.setItem("middle_wrong", JSON.stringify(wrongAnswers));
+  else {
+    wrongAnswers.push(quiz[current]);
+    localStorage.setItem("middle_wrong", JSON.stringify(wrongAnswers));
+  }
   setTimeout(() => {
     current++;
     showQuestion();
-  }, 1000);
+  }, 100);
 }
 
 function startCountdown() {
@@ -96,9 +100,13 @@ function startCountdown() {
     display.textContent = `${current + 1} / ${quiz.length} ⏳ ${count}`;
     if (count === 0) {
       clearInterval(timer);
-      wrongAnswers.push(quiz[current]);
-      localStorage.setItem("middle_wrong", JSON.stringify(wrongAnswers));
-      handleAnswer(false);
+      const correctBtn = Array.from(document.querySelectorAll(".choice-btn")).find(b => b.textContent === quiz[current].meaning);
+      if (correctBtn) correctBtn.style.backgroundColor = '#A5D6A7';
+      setTimeout(() => {
+        wrongAnswers.push(quiz[current]);
+        localStorage.setItem("middle_wrong", JSON.stringify(wrongAnswers));
+        handleAnswer(false);
+      }, 1000);
     }
   }, 1000);
 }
