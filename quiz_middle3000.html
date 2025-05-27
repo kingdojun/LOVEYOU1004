@@ -338,11 +338,11 @@ function updateTimer() {
 }
 
 function markAnswer(_, correct) {
-  let buttons = document.querySelectorAll(".choice");
+let buttons = document.querySelectorAll(".choice");
   buttons.forEach(b => {
     b.classList.remove("correct", "incorrect"); // 초기화
   });
-  let buttons = document.querySelectorAll(".choice");
+buttons = document.querySelectorAll(".choice");
   buttons.forEach(b => {
     if (b.innerText.trim() === correct.trim()) b.classList.add("correct");
   });
@@ -356,7 +356,7 @@ function markAnswer(_, correct) {
 
 function checkAnswer(selected, correct) {
   clearInterval(timerInterval);
-  let buttons = document.querySelectorAll(".choice");
+buttons = document.querySelectorAll(".choice");
   buttons.forEach(b => {
     if (b.innerText.trim() === correct.trim()) b.classList.add("correct");
     if (b.innerText.trim() === selected.trim() && selected.trim() !== correct.trim()) b.classList.add("incorrect");
@@ -448,7 +448,7 @@ if (typeof quizData !== "undefined") {
 }
 
 setTimeout(() => {
-  let buttons = document.querySelectorAll(".choice");
+buttons = document.querySelectorAll(".choice");
   console.log("✅ 현재 보기에 표시된 선택지 개수:", buttons.length);
 }, 1000);
 </script>
