@@ -87,7 +87,7 @@ function handleAnswer(correct) {
   setTimeout(() => {
     current++;
     showQuestion();
-  }, 100);
+  }, 1800);
 }
 
 function startCountdown() {
