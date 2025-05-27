@@ -9,7 +9,7 @@
     body {
       background: #f4f4f4;
       margin: 0;
-      font-family: sans-serif;
+      font-family: "Apple SD Gothic Neo", sans-serif;
     }
     .quiz-container {
       display: flex;
@@ -27,14 +27,19 @@
       text-align: center;
     }
     .question {
-      font-size: 2rem;
+      font-size: 2.2rem;
       font-weight: bold;
+    }
+    .counter {
+      font-size: 1rem;
+      color: #666;
+      margin-bottom: 1rem;
     }
     .choices {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 10px;
+      gap: 12px;
       margin-top: 2rem;
     }
     .choices button {
@@ -69,6 +74,7 @@
 <body>
   <div class="quiz-container">
     <div class="quiz-box">
+      <div class="counter" id="counter"></div>
       <div class="question" id="question">오답노트 복습</div>
       <div class="choices" id="choices"></div>
       <button id="start-button">복습 시작</button>
@@ -77,13 +83,15 @@
 
   <script>
     const saved = localStorage.getItem("middle_wrong");
-    const quizData = saved ? JSON.parse(saved) : [];
+    const originalData = saved ? JSON.parse(saved) : [];
 
     const questionEl = document.getElementById("question");
     const choicesEl = document.getElementById("choices");
+    const counterEl = document.getElementById("counter");
     const startButton = document.getElementById("start-button");
 
-    let current = null;
+    let quizData = [];
+    let currentIndex = 0;
     let clickable = true;
 
     function speak(text) {
@@ -96,15 +104,21 @@
     }
 
     function loadQuiz() {
-      clickable = true;
-      choicesEl.innerHTML = "";
+      if (currentIndex >= quizData.length) {
+        alert("복습 완료! 수고했어요 😊");
+        window.location.href = "menu.html";
+        return;
+      }
 
-      current = quizData[Math.floor(Math.random() * quizData.length)];
+      clickable = true;
+      const current = quizData[currentIndex];
       const word = current.word || current.idiom || "???";
       const correct = current.meaning;
 
       questionEl.textContent = word;
+      counterEl.textContent = (currentIndex + 1) + " / " + quizData.length;
       speak(word);
+      choicesEl.innerHTML = "";
 
       const choices = [correct];
       while (choices.length < 4) {
@@ -129,7 +143,10 @@
             if (correctBtn) correctBtn.classList.add("correct");
           }
 
-          setTimeout(loadQuiz, 1800);
+          setTimeout(() => {
+            currentIndex++;
+            loadQuiz();
+          }, 1800);
         };
         choicesEl.appendChild(btn);
       });
@@ -137,13 +154,15 @@
 
     startButton.addEventListener("click", () => {
       document.activeElement.blur();
-      if (!quizData || quizData.length === 0) {
+      if (!originalData || originalData.length === 0) {
         alert("오답이 없습니다!");
         window.location.href = "menu.html";
-      } else if (quizData.length <= 3) {
+      } else if (originalData.length <= 3) {
         alert("오답이 3개 이하군요! 🎉 축하해요!");
         window.location.href = "menu.html";
       } else {
+        quizData = originalData.slice(); // 복사
+        quizData.sort(() => Math.random() - 0.5); // 랜덤 섞기
         startButton.style.display = "none";
         loadQuiz();
       }
