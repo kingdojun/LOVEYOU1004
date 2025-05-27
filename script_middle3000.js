@@ -19,7 +19,12 @@ function shuffle(array) {
 rawData.forEach(item => {
   let wrongs = allMeanings.filter(m => m !== item.meaning);
   shuffle(wrongs);
-  let choices = [item.meaning, ...wrongs.slice(0, 3)];
+  let choices = [item.meaning];
+  while (choices.length < 4) {
+    const choice = wrongs[Math.floor(Math.random() * wrongs.length)];
+    if (!choices.includes(choice)) choices.push(choice);
+  }
+  shuffle(choices);
   shuffle(choices);
   data.push({ word: item.word, meaning: item.meaning, choices });
 });
@@ -68,12 +73,13 @@ function showQuestion() {
     const btn = document.createElement("div");
     btn.className = "choice";
     btn.innerText = choice;
+    btn.setAttribute("style", "display:block;width:45%;max-width:45%;font-size:15px;padding:10px 12px;box-sizing:border-box;");
     btn.onclick = () => {
       clearInterval(interval);
       if (choice === item.meaning) {
-        btn.classList.add("correct");
+        btn.style.backgroundColor = "#e0f8e0"; btn.style.borderColor = "#2ecc71";
       } else {
-        btn.classList.add("wrong");
+        btn.style.backgroundColor = "#fdecea"; btn.style.borderColor = "#e74c3c";
         [...choicesDiv.children].forEach(el => {
           if (el.innerText === item.meaning) {
             el.classList.add("correct");
