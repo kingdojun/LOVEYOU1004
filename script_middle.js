@@ -76,6 +76,7 @@ function showQuestion() {
 function handleAnswer(correct) {
   if (correct) score++;
   else wrongAnswers.push(quiz[current]);
+  localStorage.setItem("middle_wrong", JSON.stringify(wrongAnswers));
   setTimeout(() => {
     current++;
     showQuestion();
