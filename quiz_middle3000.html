@@ -2,10 +2,92 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: linear-gradient(to right, #fdfbfb, #ebedee);
+    }
+
+    #counter {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      font-size: 16px;
+      color: #555;
+    }
+
+    #timer {
+      font-size: 32px;
+      font-weight: bold;
+      color: #222;
+      margin-bottom: 10px;
+    }
+
+    #question {
+      font-size: 38px;
+      font-weight: bold;
+      color: #2c3e50;
+      margin-top: 10px;
+      margin-bottom: 60px;
+    }
+
+    #choices {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px 40px;
+      margin-bottom: 30px;
+      max-width: 600px;
+    }
+
+    .choice {
+      background: #ffffff;
+      border: 2px solid #bdc3c7;
+      padding: 14px 22px;
+      border-radius: 14px;
+      cursor: pointer;
+      font-size: 18px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+      transition: all 0.2s;
+    }
+
+    .choice:hover {
+      background-color: #f0f0f0;
+    }
+
+    .correct {
+      border-color: #27ae60 !important;
+      background-color: #eafaf1 !important;
+    }
+
+    .incorrect {
+      border-color: #e74c3c !important;
+      background-color: #fdecea !important;
+    }
+
+    #pauseBtn {
+      font-size: 18px;
+      padding: 10px 16px;
+      border-radius: 10px;
+      background-color: #dfe6e9;
+      border: none;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+  </style>
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>1300 영단어 퀴즈</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="" />
 </head>
 <body>
   <div id="counter">문제 0/0</div>
@@ -13,7 +95,7 @@
   <div id="question">문제 로딩 중...</div>
   <div id="choices"></div>
   <button id="pauseBtn" onclick="togglePause()">⏸</button>
-  <script src="data.js"></script>
-  <script src="script.js"></script>
+  <script src="data_middle3000.js"></script>
+  <script src=""></script>
 </body>
 </html>

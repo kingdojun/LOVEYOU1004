@@ -6,9 +6,21 @@
   <title>중학영단어 3000 로그인</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f9f9f9;
+      margin: 0;
+      font-family: sans-serif;
+    }
+    .login-container {
       text-align: center;
-      margin-top: 100px;
+      border: 2px solid #ccc;
+      padding: 40px;
+      border-radius: 12px;
+      background-color: white;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
     input[type="password"] {
       padding: 10px;
@@ -22,13 +34,13 @@
   </style>
 </head>
 <body>
-  <h2>비밀번호 입력</h2>
-  <input type="password" id="password" placeholder="비밀번호 입력">
-  <button onclick="login()">로그인</button>
-
+  <div class="login-container">
+    <h2>비밀번호 입력</h2>
+    <input type="password" id="password" placeholder="비밀번호 입력">
+    <button onclick="login()">로그인</button>
+  </div>
   <script>
-    const password = "1004";  // 작은딸 비밀번호 고정
-
+    const password = "1004";
     function login() {
       const input = document.getElementById("password").value;
       if (input === password) {
