@@ -17,18 +17,34 @@
   </div>
 
   <script>
+  const saved = localStorage.getItem("middle_wrong");
+  const quizData = saved ? JSON.parse(saved) : [];
+
+  if (!quizData || quizData.length <= 3) {
+    alert("오답이 3개 이하군요! 🎉 축하해요!");
+    window.location.href = "menu.html";
+  } else {
+  }
+</script>
     const saved = localStorage.getItem("middle_wrong");
     const quizData = saved ? JSON.parse(saved) : [];
 
     if (!quizData || quizData.length === 0) {
       alert("오답이 없습니다! 메인 메뉴로 이동합니다.");
       window.location.href = "menu.html";
-    } else if (quizData.length <= 3) {
-      alert("오답이 3개 이하군요! 🎉 축하해요!");
-      window.location.href = "menu.html";
     }
   </script>
 
-  <script src="script_middle.js" defer></script>
+<script>
+  const saved = localStorage.getItem("middle_wrong");
+  const quizData = saved ? JSON.parse(saved) : [];
+
+  if (!quizData || quizData.length <= 3) {
+    alert("오답이 3개 이하군요! 🎉 축하해요!");
+    window.location.href = "menu.html";
+  }
+</script>
+<script src="script_middle.js" defer></script>
 </body>
+
 </html>
