@@ -1,5 +1,5 @@
-const wrongAnswers = JSON.parse(localStorage.getItem('wrongAnswers_middle') || '[]');
-if (wrongAnswers.length === 0) {
+const wrongAnswers = JSON.parse(localStorage.getItem('middle_wrong') || '[]');
+if (!wrongAnswers || wrongAnswers.length === 0) {
   alert("오답이 없습니다!");
   window.location.href = "menu.html";
 } else {
