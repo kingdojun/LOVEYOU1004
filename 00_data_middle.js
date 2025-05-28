@@ -1,4 +1,4 @@
-window.quizData = [
+const quizData = [
   {
     "word": "life",
     "meaning": "삶,인생"
