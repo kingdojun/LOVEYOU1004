@@ -1,0 +1,113 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>중학 영단어 퀴즈</title>
+  <link rel="stylesheet" href="00_style.css" />
+</head>
+<body>
+  <div id="progress">1 / 500</div>
+  <div id="question">단어</div>
+  <div id="timer">5</div>
+  <div class="choice-wrapper">
+    <button class="choice" onclick="selectAnswer(0)">보기1</button>
+    <button class="choice" onclick="selectAnswer(1)">보기2</button>
+    <button class="choice" onclick="selectAnswer(2)">보기3</button>
+    <button class="choice" onclick="selectAnswer(3)">보기4</button>
+  </div>
+  <button id="pauseBtn" onclick="togglePause()">⏸️</button>
+
+  <script>
+    let currentQuestion = 0;
+    let timer = 5;
+    let interval;
+    let paused = false;
+
+    const quizData = [
+      { word: "apple", meaning: "사과" },
+      { word: "run", meaning: "달리다" },
+      { word: "book", meaning: "책" },
+      { word: "happy", meaning: "행복한" }
+    ];
+
+    const choices = document.querySelectorAll(".choice");
+
+    function startTimer() {
+      clearInterval(interval);
+      timer = 5;
+      document.getElementById("timer").textContent = timer;
+      interval = setInterval(() => {
+        if (!paused) {
+          timer--;
+          document.getElementById("timer").textContent = timer;
+          if (timer <= 0) {
+            clearInterval(interval);
+            showAnswer(-1); // no answer selected
+          }
+        }
+      }, 1000);
+    }
+
+    function loadQuestion() {
+      const q = quizData[currentQuestion];
+      document.getElementById("question").textContent = q.word;
+      const options = shuffle([
+        q.meaning,
+        "엉뚱한 뜻1",
+        "엉뚱한 뜻2",
+        "엉뚱한 뜻3"
+      ]);
+      options.forEach((text, i) => {
+        choices[i].textContent = text;
+        choices[i].style.backgroundColor = "#bbdefb";
+        choices[i].disabled = false;
+      });
+      document.getElementById("progress").textContent = (currentQuestion + 1) + " / " + quizData.length;
+      timer = 5;
+      document.getElementById("timer").textContent = timer;
+      startTimer();
+    }
+
+    function shuffle(array) {
+      return array.sort(() => Math.random() - 0.5);
+    }
+
+    function selectAnswer(index) {
+      clearInterval(interval);
+      showAnswer(index);
+    }
+
+    function showAnswer(selectedIndex) {
+      const q = quizData[currentQuestion];
+      const correct = q.meaning;
+      choices.forEach((btn, i) => {
+        if (btn.textContent === correct) {
+          btn.classList.add("correct");
+        } else if (i === selectedIndex) {
+          btn.classList.add("wrong");
+        }
+        btn.disabled = true;
+      });
+      setTimeout(() => {
+        currentQuestion++;
+        if (currentQuestion < quizData.length) {
+          loadQuestion();
+        } else {
+          alert("퀴즈 종료!");
+        }
+      }, 1500);
+    }
+
+    function togglePause() {
+      paused = !paused;
+      document.getElementById("pauseBtn").textContent = paused ? "▶️" : "⏸️";
+    }
+
+    window.onload = () => {
+      loadQuestion();
+    };
+  </script>
+</body>
+</html>
