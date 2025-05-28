@@ -1,30 +1,32 @@
 
-/* 감성 배경 이미지 + 정렬 완전 복구 */
+/* 전체 배경: 감성 이미지 */
 body {
   background: url('a84c71d0-2b04-407d-8686-b2dfa3cbc8df.png') no-repeat center center fixed;
   background-size: cover;
-  font-family: 'Arial', sans-serif;
   margin: 0;
   padding: 0;
-  height: 100vh;
+  font-family: 'Arial', sans-serif;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  height: 100vh;
 }
 
-/* 상단 정보 */
+/* 문제 번호 */
 #progress {
   font-size: 1.2rem;
   margin-bottom: 8px;
 }
 
+/* 문제 단어 */
 #question {
   font-size: 2rem;
   font-weight: bold;
-  margin: 12px 0;
+  margin: 10px 0;
 }
 
+/* 타이머 */
 #timer {
   font-size: 1.2rem;
   font-weight: bold;
@@ -32,40 +34,29 @@ body {
   animation: pulse 1s infinite;
   margin-bottom: 10px;
 }
-
 @keyframes pulse {
   0% { transform: scale(1); opacity: 1; }
   50% { transform: scale(1.25); opacity: 0.7; }
   100% { transform: scale(1); opacity: 1; }
 }
 
-/* 보기 버튼 2줄 정렬 */
-button.choice {
-  background-color: rgba(255, 255, 255, 0.85);
+/* 보기 버튼 */
+.choice {
+  background-color: rgba(255,255,255,0.9);
   border: 2px solid #ccc;
-  border-radius: 10px;
+  border-radius: 12px;
   font-weight: bold;
   font-size: 1rem;
   padding: 10px 16px;
   margin: 8px;
   cursor: pointer;
-  transition: transform 0.2s ease, background-color 0.3s ease;
+  transition: 0.2s ease;
   flex: 0 0 45%;
   max-width: 45%;
 }
-
-button.choice:hover {
+.choice:hover {
   transform: scale(1.05);
 }
-
-/* 버튼 2줄 그리드 박스 */
-button.choice:nth-of-type(1),
-button.choice:nth-of-type(2),
-button.choice:nth-of-type(3),
-button.choice:nth-of-type(4) {
-  display: inline-block;
-}
-
 .correct {
   background-color: #a5d6a7 !important;
   color: #000;
@@ -75,11 +66,12 @@ button.choice:nth-of-type(4) {
   color: #000;
 }
 
-/* 보기 버튼들을 감싸는 div */
+/* 보기 버튼 감싸는 박스 */
 .choice-wrapper {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  margin-top: 10px;
   max-width: 600px;
 }
 
@@ -94,7 +86,7 @@ button.choice:nth-of-type(4) {
   width: 50px;
   height: 50px;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition: 0.3s ease;
   box-shadow: 0 2px 5px rgba(0,0,0,0.15);
   display: inline-flex;
   align-items: center;
