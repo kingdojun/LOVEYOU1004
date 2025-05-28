@@ -1,4 +1,4 @@
-const window.quizData = [
+window.quizData = [
   {
     "word": "life",
     "meaning": "삶,인생"
