@@ -22,6 +22,7 @@ if (!wrongAnswers || wrongAnswers.length === 0) {
   function speak(text) {
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = "en-US";
+    speechSynthesis.cancel(); // Stop any current speech
     speechSynthesis.speak(utterance);
   }
 
@@ -34,7 +35,9 @@ if (!wrongAnswers || wrongAnswers.length === 0) {
   function showQuestion() {
     if (paused || current >= total) {
       if (current >= total) {
-        alert("복습을 완료했어요! 잘했어요!");
+        if (confirm("복습을 완료했어요! 잘했어요!\n👉 오답 목록을 비우시겠습니까?")) {
+          localStorage.removeItem('middle_wrong');
+        }
         window.location.href = "menu.html";
       }
       return;
@@ -59,13 +62,13 @@ if (!wrongAnswers || wrongAnswers.length === 0) {
       btn.textContent = option;
       btn.className = "choice-btn";
       btn.onclick = () => {
-        // 항상 정답도 초록색 표시
-        [...choicesEl.children].forEach(el => {
-          if (el.textContent === q.meaning) {
-            el.style.backgroundColor = "lightgreen";
-          }
-        });
-        btn.style.backgroundColor = option === q.meaning ? "lightgreen" : "lightcoral";
+        if (option === q.meaning) {
+          btn.style.backgroundColor = "lightgreen";
+        } else {
+          btn.style.backgroundColor = "lightcoral";
+          const correctBtn = [...choicesEl.children].find(b => b.textContent === q.meaning);
+          if (correctBtn) correctBtn.style.backgroundColor = "lightgreen";
+        }
         setTimeout(() => {
           current++;
           showQuestion();
@@ -75,5 +78,6 @@ if (!wrongAnswers || wrongAnswers.length === 0) {
     });
   }
 
+  document.getElementById("pause-btn").addEventListener("click", togglePause);
   showQuestion();
 }
