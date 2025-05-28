@@ -1,11 +1,11 @@
 
-/* 전체 배경: 감성 이미지 */
+/* 배경 이미지 적용 */
 body {
   background: url('a84c71d0-2b04-407d-8686-b2dfa3cbc8df.png') no-repeat center center fixed;
   background-size: cover;
+  font-family: 'Arial', sans-serif;
   margin: 0;
   padding: 0;
-  font-family: 'Arial', sans-serif;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -13,31 +13,21 @@ body {
   height: 100vh;
 }
 
-/* 문제 번호 */
+/* 상단 정보 */
 #progress {
   font-size: 1.2rem;
   margin-bottom: 8px;
 }
-
-/* 문제 단어 */
 #question {
   font-size: 2rem;
   font-weight: bold;
   margin: 10px 0;
 }
-
-/* 타이머 */
 #timer {
   font-size: 1.2rem;
   font-weight: bold;
   color: #fff;
-  animation: pulse 1s infinite;
   margin-bottom: 10px;
-}
-@keyframes pulse {
-  0% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.25); opacity: 0.7; }
-  100% { transform: scale(1); opacity: 1; }
 }
 
 /* 보기 버튼 */
@@ -66,7 +56,7 @@ body {
   color: #000;
 }
 
-/* 보기 버튼 감싸는 박스 */
+/* 보기 버튼 정렬 박스 */
 .choice-wrapper {
   display: flex;
   flex-wrap: wrap;
