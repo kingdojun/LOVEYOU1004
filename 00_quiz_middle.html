@@ -23,8 +23,8 @@
     const choicesEl = document.getElementById("choices");
     const pauseButton = document.getElementById("pause-button");
 
-    let quizData = window.quizData || [];
-    let questions = [];
+    const quizData = window.quizData || [];
+    const questions = shuffle([...quizData]).slice(0, 500);
     let currentIndex = 0;
     let timer = 5;
     let interval = null;
@@ -36,10 +36,6 @@
         [array[i], array[j]] = [array[j], array[i]];
       }
       return array;
-    }
-
-    function pickQuestions() {
-      return shuffle([...quizData]).slice(0, 500);
     }
 
     function speak(text) {
@@ -54,40 +50,24 @@
       questionWord.textContent = q.word;
       speak(q.word);
 
-      let options = shuffle([
+      const allChoices = shuffle([
         q.meaning,
-        ...shuffle(quizData.filter(d => d.word !== q.word)).slice(0, 3).map(d => d.meaning)
+        ...shuffle(quizData.filter(item => item.meaning !== q.meaning)).slice(0, 3).map(d => d.meaning)
       ]);
 
       choicesEl.innerHTML = "";
-      options.forEach(opt => {
+      allChoices.forEach(choice => {
         const btn = document.createElement("button");
         btn.className = "choice-button";
-        btn.textContent = opt;
-        btn.onclick = () => checkAnswer(opt, q.meaning, btn);
+        btn.textContent = choice;
+        btn.onclick = () => handleAnswer(choice, q.meaning, btn);
         choicesEl.appendChild(btn);
       });
 
       resetTimer();
     }
 
-    function resetTimer() {
-      clearInterval(interval);
-      timer = 5;
-      timerEl.textContent = `⏱ ${timer}`;
-      interval = setInterval(() => {
-        if (!paused) {
-          timer--;
-          timerEl.textContent = `⏱ ${timer}`;
-          if (timer <= 0) {
-            clearInterval(interval);
-            showAnswer(null);
-          }
-        }
-      }, 1000);
-    }
-
-    function checkAnswer(selected, correct, button) {
+    function handleAnswer(selected, correct, button) {
       clearInterval(interval);
       const buttons = document.querySelectorAll(".choice-button");
       buttons.forEach(btn => {
@@ -102,8 +82,20 @@
       setTimeout(nextQuestion, 1500);
     }
 
-    function showAnswer(selected) {
-      checkAnswer(selected, questions[currentIndex].meaning, null);
+    function resetTimer() {
+      clearInterval(interval);
+      timer = 5;
+      timerEl.textContent = `⏱ ${timer}`;
+      interval = setInterval(() => {
+        if (!paused) {
+          timer--;
+          timerEl.textContent = `⏱ ${timer}`;
+          if (timer <= 0) {
+            clearInterval(interval);
+            handleAnswer(null, questions[currentIndex].meaning);
+          }
+        }
+      }, 1000);
     }
 
     function nextQuestion() {
@@ -121,10 +113,7 @@
       pauseButton.textContent = paused ? "▶ 다시시작" : "⏸ 일시정지";
     };
 
-    window.onload = () => {
-      questions = pickQuestions();
-      showQuestion();
-    };
+    window.onload = showQuestion;
   </script>
 </body>
 </html>
