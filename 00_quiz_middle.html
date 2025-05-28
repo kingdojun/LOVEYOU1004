@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -5,83 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>중학영단어 퀴즈</title>
   <link rel="stylesheet" href="00_style.css" />
-  <style>
-    body {
-      font-family: sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      background: #f7f7f7;
-    }
-    #quiz-container {
-      text-align: center;
-      max-width: 600px;
-    }
-    #question-number {
-      font-size: 1.2rem;
-      margin-bottom: 0.5rem;
-    }
-    #question-word {
-      font-size: 3.5rem;
-      font-weight: bold;
-      margin: 1rem 0;
-    }
-    #timer {
-      font-size: 1.2rem;
-      margin-bottom: 1rem;
-    }
-    .choices-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-      margin: 20px 0;
-    }
-    .choice-button {
-      flex: 0 0 45%;
-      font-size: 1.2rem;
-      max-width: 45%;
-      padding: 15px;
-      font-size: 1rem;
-      border: 2px solid #ccc;
-      border-radius: 10px;
-      background: white;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    .choice-button:hover {
-      background: #efefef;
-    }
-    .correct {
-      background-color: #a0f0a0 !important;
-      font-weight: bold;
-      border-color: green !important;
-      color: black;
-    }
-    .incorrect {
-      background-color: #f8a0a0 !important;
-      font-weight: bold;
-      border-color: red !important;
-      color: black;
-    }
-    #pause-button {
-      margin-top: 20px;
-      padding: 8px 16px;
-      font-size: 0.95rem;
-      padding: 12px 25px;
-      font-size: 1.1rem;
-      border: none;
-      border-radius: 10px;
-      background: #4caf50;
-      color: white;
-      cursor: pointer;
-    }
-  </style>
 </head>
 <body>
-  <div id="quiz-container">
+  <div id="quiz-container" class="quiz-centered">
     <div id="question-number">1 / 500</div>
     <div id="question-word">Loading...</div>
     <div id="timer">⏱ 5</div>
@@ -97,8 +24,8 @@
     const choicesEl = document.getElementById("choices");
     const pauseButton = document.getElementById("pause-button");
 
-    const quizData = window.quizData || [];
-    const questions = shuffle([...quizData]).slice(0, 500);
+    let quizData = window.quizData || [];
+    let questions = shuffle([...quizData]).slice(0, 500);
     let currentIndex = 0;
     let timer = 5;
     let interval = null;
@@ -118,76 +45,87 @@
       speechSynthesis.speak(utter);
     }
 
-    function showQuestion() {
-      const q = questions[currentIndex];
+    function saveWrongAnswer(wordObj) {
+      let wrongList = JSON.parse(localStorage.getItem("wrongAnswers_middle")) || [];
+      if (!wrongList.some(item => item.word === wordObj.word)) {
+        wrongList.push(wordObj);
+        localStorage.setItem("wrongAnswers_middle", JSON.stringify(wrongList));
+      }
+    }
+
+    function displayQuestion() {
+      const wordObj = questions[currentIndex];
       questionNumber.textContent = `${currentIndex + 1} / ${questions.length}`;
-      questionWord.textContent = q.word;
-      speak(q.word);
-
-      const allChoices = shuffle([
-        q.meaning,
-        ...shuffle(quizData.filter(item => item.meaning !== q.meaning)).slice(0, 3).map(d => d.meaning)
-      ]);
-
+      questionWord.textContent = wordObj.word;
+      speak(wordObj.word);
+      timerEl.textContent = `⏱ ${timer}`;
       choicesEl.innerHTML = "";
-      allChoices.forEach(choice => {
+
+      const correct = wordObj.meaning;
+      const options = shuffle([correct, ...getRandomMeanings(correct)]);
+
+      options.forEach(option => {
         const btn = document.createElement("button");
         btn.className = "choice-button";
-        btn.textContent = choice;
-        btn.onclick = () => handleAnswer(choice, q.meaning);
+        btn.textContent = option;
+        btn.onclick = () => handleAnswer(option === correct, option, correct, wordObj);
         choicesEl.appendChild(btn);
       });
 
-      resetTimer();
+      startTimer(wordObj);
     }
 
-    function handleAnswer(selected, correct) {
+    function getRandomMeanings(exclude) {
+      const allMeanings = quizData.map(q => q.meaning).filter(m => m !== exclude);
+      return shuffle(allMeanings).slice(0, 3);
+    }
+
+    function handleAnswer(isCorrect, selected, correct, wordObj) {
       clearInterval(interval);
       const buttons = document.querySelectorAll(".choice-button");
       buttons.forEach(btn => {
-        if (btn.textContent === correct) {
-          btn.classList.add("correct");
-        }
-        if (btn.textContent === selected && selected !== correct) {
-          btn.classList.add("incorrect");
-        }
         btn.disabled = true;
+        if (btn.textContent === correct) {
+          btn.style.backgroundColor = "green";
+          btn.style.color = "white";
+        }
+        if (!isCorrect && btn.textContent === selected) {
+          btn.style.backgroundColor = "red";
+          btn.style.color = "white";
+        }
       });
-      setTimeout(nextQuestion, 1500);
+
+      if (!isCorrect) saveWrongAnswer(wordObj);
+
+      setTimeout(() => {
+        currentIndex++;
+        if (currentIndex < questions.length) {
+          displayQuestion();
+        }
+      }, 1500);
     }
 
-    function resetTimer() {
-      clearInterval(interval);
+    function startTimer(wordObj) {
       timer = 5;
-      timerEl.textContent = `⏱ ${timer}`;
       interval = setInterval(() => {
         if (!paused) {
           timer--;
           timerEl.textContent = `⏱ ${timer}`;
-          if (timer <= 0) {
+          if (timer === 0) {
             clearInterval(interval);
-            handleAnswer(null, questions[currentIndex].meaning);
+            saveWrongAnswer(questions[currentIndex]);
+            handleAnswer(false, "", questions[currentIndex].meaning, questions[currentIndex]);
           }
         }
       }, 1000);
     }
 
-    function nextQuestion() {
-      currentIndex++;
-      if (currentIndex < questions.length) {
-        showQuestion();
-      } else {
-        alert("퀴즈 완료!");
-        location.reload();
-      }
-    }
-
     pauseButton.onclick = () => {
       paused = !paused;
-      pauseButton.textContent = paused ? "▶ 다시시작" : "⏸ 일시정지";
+      pauseButton.textContent = paused ? "▶ 재생" : "⏸ 일시정지";
     };
 
-    window.onload = showQuestion;
+    displayQuestion();
   </script>
 </body>
 </html>
