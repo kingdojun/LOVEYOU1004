@@ -14,12 +14,20 @@
 <div id="timer">⏱ 5</div>
 <div class="choices-container" id="choices"></div>
 <div id="answer-display" style="display: none;"></div>
-<button id="pause-button">⏸ 일시정지</button><button id="next-button" style="margin-left: 10px; background-color: #90caf9; color: white; padding: 10px 20px; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer;">⏭️ 앞으로가기</button>
+<button id="next-button" style="margin-left: 10px; background-color: #90caf9; color: white; padding: 10px 20px; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer;">⏭️ 앞으로가기</button>
 <button id="retry-button" style="display: none;">🔁 다시하기</button>
-</div>
+<div id="button-container" style="display: flex; justify-content: center; gap: 12px; margin-top: 20px;"><button id="pause-button">⏸ 일시정지</button><button id="next-button" style="background-color: #90caf9; color: white; padding: 10px 20px; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer;">⏭️ 앞으로가기</button></div></div>
 <script src="00_data_middle.js"></script>
 <script src="00_script_review.js"></script>
 <script>
+document.getElementById("next-button").addEventListener("click", function () {
+  if (typeof moveToNextQuestion === "function") {
+    moveToNextQuestion();
+  } else {
+    alert("다음 문제로 이동할 수 없습니다.");
+  }
+});
+</script><script>
 document.getElementById("next-button").addEventListener("click", function () {
   if (typeof moveToNextQuestion === "function") {
     moveToNextQuestion();
