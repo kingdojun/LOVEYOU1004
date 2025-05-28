@@ -1,14 +1,17 @@
 const wrongAnswers = JSON.parse(localStorage.getItem('middle_wrong') || '[]');
+
 if (!wrongAnswers || wrongAnswers.length === 0) {
   alert("오답이 없습니다!");
   window.location.href = "menu.html";
 } else {
   let current = 0;
   let paused = false;
-  const total = wrongAnswers.length;
-  const shuffled = wrongAnswers
-    .filter((v, i, a) => a.findIndex(t => t.word === v.word) === i)
-    .sort(() => Math.random() - 0.5);
+
+  const deduped = wrongAnswers.filter(
+    (v, i, a) => a.findIndex(t => t.word === v.word) === i
+  );
+  const total = deduped.length;
+  const shuffled = deduped.sort(() => Math.random() - 0.5);
 
   const questionEl = document.getElementById("question");
   const choicesEl = document.getElementById("choices");
