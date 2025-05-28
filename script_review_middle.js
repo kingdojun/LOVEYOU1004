@@ -58,6 +58,12 @@ if (!wrongAnswers || wrongAnswers.length === 0) {
       btn.textContent = option;
       btn.className = "choice-btn";
       btn.onclick = () => {
+      // Always highlight correct answer
+      [...choicesEl.children].forEach(el => {
+        if (el.textContent === q.meaning) {
+          el.style.backgroundColor = "lightgreen";
+        }
+      });
         btn.style.backgroundColor = option === q.meaning ? "lightgreen" : "lightcoral";
         setTimeout(() => {
           current++;
