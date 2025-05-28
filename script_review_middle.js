@@ -1,101 +1,83 @@
 
-const saved = localStorage.getItem("middle_wrong");
-const wrongList = saved ? JSON.parse(saved) : [];
+const wrongAnswers = JSON.parse(localStorage.getItem('middle_wrong') || '[]');
 
-if (!wrongList || wrongList.length === 0) {
+if (!wrongAnswers || wrongAnswers.length === 0) {
   alert("오답이 없습니다!");
   window.location.href = "menu.html";
-} else if (wrongList.length < 4) {
-  alert("오답이 3개 이하군요! 축하해요!");
-  window.location.href = "menu.html";
 } else {
-  const quizContainer = document.getElementById("quiz-container");
-  const wordElement = document.getElementById("question");
-  const choicesElement = document.getElementById("choices");
-  const counterElement = document.getElementById("counter");
-  const pauseButton = document.getElementById("pauseBtn");
-
   let current = 0;
-  const quizData = shuffle([...wrongList]);
-  const total = quizData.length;
-  let isPaused = false;
-  let timer;
+  let paused = false;
 
-  function shuffle(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-  }
+  const deduped = wrongAnswers.filter(
+    (v, i, a) => a.findIndex(t => t.word === v.word) === i
+  );
+  const total = deduped.length;
+  const shuffled = deduped.sort(() => Math.random() - 0.5);
+
+  const questionEl = document.getElementById("question");
+  const choicesEl = document.getElementById("choices");
+  const countEl = document.getElementById("word-count");
+  const pauseBtn = document.getElementById("pause-btn");
 
   function speak(text) {
-    window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'en-US';
+    utterance.lang = "en-US";
+    speechSynthesis.cancel();
     speechSynthesis.speak(utterance);
   }
 
+  function togglePause() {
+    paused = !paused;
+    pauseBtn.textContent = paused ? "▶ 재개하기" : "⏸ 일시정지";
+    if (!paused) showQuestion();
+  }
+
   function showQuestion() {
-    if (current >= total) {
-      alert("복습이 끝났어요! 수고했어요.");
-      window.location.href = "menu.html";
+    if (paused || current >= total) {
+      if (current >= total) {
+        if (confirm("복습을 완료했어요! 잘했어요!\n👉 오답 목록을 비우시겠습니까?")) {
+          localStorage.removeItem('middle_wrong');
+        }
+        window.location.href = "menu.html";
+      }
       return;
     }
 
-    const currentWord = quizData[current];
-    const correct = currentWord.meaning;
-    let choices = [correct];
+    const q = shuffled[current];
+    countEl.textContent = `${current + 1} / ${total}`;
+    questionEl.textContent = q.word;
+    speak(q.word);
 
-    while (choices.length < 4) {
-      const rand = quizData[Math.floor(Math.random() * quizData.length)];
-      if (!choices.includes(rand.meaning)) {
-        choices.push(rand.meaning);
-      }
+    const options = new Set([q.meaning]);
+    while (options.size < 4) {
+      const rand = wrongAnswers[Math.floor(Math.random() * wrongAnswers.length)];
+      options.add(rand.meaning);
     }
 
-    choices = shuffle(choices);
-    wordElement.textContent = currentWord.word;
-    speak(currentWord.word);
-    counterElement.textContent = `${current + 1} / ${total}`;
+    const shuffledOptions = Array.from(options).sort(() => Math.random() - 0.5);
+    choicesEl.innerHTML = "";
 
-    choicesElement.innerHTML = "";
-    choices.forEach(choice => {
+    shuffledOptions.forEach(option => {
       const btn = document.createElement("button");
-      btn.textContent = choice;
-      btn.className = "choice-button";
+      btn.textContent = option;
+      btn.className = "choice-btn";
       btn.onclick = () => {
-        clearTimeout(timer);
-        if (choice === correct) {
-          btn.style.backgroundColor = "#4CAF50";
+        if (option === q.meaning) {
+          btn.style.backgroundColor = "lightgreen";
         } else {
-          btn.style.backgroundColor = "#f44336";
-          const correctBtn = [...choicesElement.children].find(b => b.textContent === correct);
-          if (correctBtn) correctBtn.style.backgroundColor = "#4CAF50";
+          btn.style.backgroundColor = "lightcoral";
+          const correctBtn = [...choicesEl.children].find(b => b.textContent === q.meaning);
+          if (correctBtn) correctBtn.style.backgroundColor = "lightgreen";
         }
         setTimeout(() => {
           current++;
-          if (!isPaused) showQuestion();
-        }, 1200);
+          showQuestion();
+        }, 1500);
       };
-      choicesElement.appendChild(btn);
+      choicesEl.appendChild(btn);
     });
-
-    timer = setTimeout(() => {
-      const correctBtn = [...choicesElement.children].find(b => b.textContent === correct);
-      if (correctBtn) correctBtn.style.backgroundColor = "#4CAF50";
-      setTimeout(() => {
-        current++;
-        if (!isPaused) showQuestion();
-      }, 1000);
-    }, 5000);
   }
 
-  pauseButton.addEventListener("click", () => {
-    isPaused = !isPaused;
-    pauseButton.textContent = isPaused ? "▶️" : "⏸️";
-    if (!isPaused) showQuestion();
-  });
-
+  document.getElementById("pause-btn").addEventListener("click", togglePause);
   showQuestion();
 }
