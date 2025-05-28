@@ -1,23 +1,31 @@
 <!DOCTYPE html>
+
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>오답노트 복습</title>
-  <link rel="stylesheet" href="00_style.css" />
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>오답노트 복습</title>
+<link href="00_style.css" rel="stylesheet"/>
 </head>
 <body>
-  <div id="quiz-container" class="quiz-centered">
-    <div id="question-number">1 / ?</div>
-    <div id="question-word">Loading...</div>
-    <div id="timer">⏱ 5</div>
-    <div id="choices" class="choices-container"></div>
-    <div id="answer-display" style="display: none;"></div>
-    <button id="pause-button">⏸ 일시정지</button>
-    <button id="retry-button" style="display: none;">🔁 다시하기</button>
-  </div>
-
-  <script src="00_data_middle.js"></script>
-  <script src="00_script_review.js"></script>
-</body>
+<div class="quiz-centered" id="quiz-container">
+<div id="question-number">1 / ?</div>
+<div id="question-word">Loading...</div>
+<div id="timer">⏱ 5</div>
+<div class="choices-container" id="choices"></div>
+<div id="answer-display" style="display: none;"></div>
+<button id="pause-button">⏸ 일시정지</button><button id="resetWrongNote" style="margin-top: 20px; background-color: #f8b5c5; color: white; padding: 10px 20px; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer;">🧹 오답노트 초기화</button>
+<button id="retry-button" style="display: none;">🔁 다시하기</button>
+</div>
+<script src="00_data_middle.js"></script>
+<script src="00_script_review.js"></script>
+<script>
+document.getElementById("resetWrongNote").addEventListener("click", function () {
+  if (confirm("정말 오답노트를 초기화할까요? 복구할 수 없습니다.")) {
+    localStorage.removeItem("wrongAnswers_middle");
+    alert("오답노트가 초기화되었습니다!");
+    window.location.href = "00_menu.html";
+  }
+});
+</script></body>
 </html>
