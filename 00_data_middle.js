@@ -3437,19 +3437,19 @@ window.quizData = [
   },
   {
     "word": "repair",
-    "meaning": "감명[인상]을 주다"
+    "meaning": "(상황을) 바로잡다"
   },
   {
     "word": "dislike",
     "meaning": "싫어하다, 싫어함"
   },
   {
-    "word": "ba가",
+    "word": "bark",
     "meaning": "짖다"
   },
   {
-    "word": "ba가",
-    "meaning": "(감)싸다, 포장하다"
+    "word": "bark",
+    "meaning": "빽 내지르다"
   },
   {
     "word": "feed",
@@ -3461,7 +3461,7 @@ window.quizData = [
   },
   {
     "word": "final",
-    "meaning": "대신하다, 교체하다"
+    "meaning": "졸업 시험"
   },
   {
     "word": "lend",
@@ -3473,7 +3473,7 @@ window.quizData = [
   },
   {
     "word": "public",
-    "meaning": "실패하다"
+    "meaning": "정부의"
   },
   {
     "word": "suffer",
@@ -3485,7 +3485,7 @@ window.quizData = [
   },
   {
     "word": "giant",
-    "meaning": "건너뛰다"
+    "meaning": "위대한, 거대한"
   },
   {
     "word": "hang",
@@ -3497,7 +3497,7 @@ window.quizData = [
   },
   {
     "word": "bend",
-    "meaning": "필요한"
+    "meaning": "굽이, 굽은 곳"
   },
   {
     "word": "pleasant",
@@ -3508,7 +3508,7 @@ window.quizData = [
     "meaning": "뜨다[띄우다], 떠다니다"
   },
   {
-    "word": "float",
+    "word": "elementary",
     "meaning": "기초의, 초등학교의"
   },
   {
