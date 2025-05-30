@@ -3304,8 +3304,8 @@ window.quizData = [
     "meaning": "새장, 우리"
   },
   {
-    "word": "cage",
-    "meaning": "의지[뜻], 유언[유서]"
+    "word": "recourse",
+    "meaning": "의지"
   },
   {
     "word": "treasure",
