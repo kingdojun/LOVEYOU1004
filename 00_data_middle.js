@@ -3280,7 +3280,7 @@ window.quizData = [
     "meaning": "양동이"
   },
   {
-    "word": "bucket",
+    "word": "situation",
     "meaning": "상황"
   },
   {
