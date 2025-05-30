@@ -3484,8 +3484,8 @@ window.quizData = [
     "meaning": "거대한, 거인"
   },
   {
-    "word": "giant",
-    "meaning": "위대한, 거대한"
+    "word": "enormous",
+    "meaning": "막대한, 거대한"
   },
   {
     "word": "hang",
