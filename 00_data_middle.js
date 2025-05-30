@@ -3316,7 +3316,7 @@ window.quizData = [
     "meaning": "연"
   },
   {
-    "word": "kite",
+    "word": "development",
     "meaning": "발전[발달], 개발"
   },
   {
