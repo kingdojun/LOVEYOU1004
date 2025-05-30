@@ -3520,7 +3520,7 @@ window.quizData = [
     "meaning": "집중하다"
   },
   {
-    "word": "concentrate",
+    "word": "fantastic",
     "meaning": "환상적인"
   },
   {
