@@ -3376,8 +3376,8 @@ window.quizData = [
     "meaning": "수확(하다)"
   },
   {
-    "word": "harvest",
-    "meaning": "경보기, 놀라게 하다"
+    "word": "astonish",
+    "meaning": "놀라게 하다"
   },
   {
     "word": "headache",
