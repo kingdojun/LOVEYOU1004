@@ -3268,7 +3268,7 @@ window.quizData = [
     "meaning": "대학"
   },
   {
-    "word": "university",
+    "word": "cyberspace",
     "meaning": "사이버 공간"
   },
   {
