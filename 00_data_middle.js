@@ -3400,8 +3400,8 @@ window.quizData = [
     "meaning": "관광 여행(하다)"
   },
   {
-    "word": "tour",
-    "meaning": "상[보상](을 주다)"
+    "word": "reward",
+    "meaning": "보상"
   },
   {
     "word": "dot",
