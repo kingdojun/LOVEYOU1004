@@ -3532,8 +3532,8 @@ window.quizData = [
     "meaning": "잘생긴"
   },
   {
-    "word": "handsome",
-    "meaning": "맛있는"
+    "word": "modish",
+    "meaning": "유행을 따른"
   },
   {
     "word": "polite",
