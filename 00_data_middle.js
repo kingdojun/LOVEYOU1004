@@ -1840,8 +1840,8 @@ window.quizData = [
     "meaning": "국가,민족"
   },
   {
-    "word": "effect",
-    "meaning": "노력"
+    "word": "effort",
+    "meaning": "수고, 노력"
   },
   {
     "word": "charity",
