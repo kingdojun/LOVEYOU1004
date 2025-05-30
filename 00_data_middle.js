@@ -3388,7 +3388,7 @@ window.quizData = [
     "meaning": "도보 여행(하다)"
   },
   {
-    "word": "hike",
+    "word": "expense",
     "meaning": "비용(이 들다)"
   },
   {
