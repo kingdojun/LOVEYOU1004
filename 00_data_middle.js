@@ -3244,8 +3244,8 @@ window.quizData = [
     "meaning": "선장[기장], 주장"
   },
   {
-    "word": "captain",
-    "meaning": "곡물 가루"
+    "word": "grain",
+    "meaning": "곡물"
   },
   {
     "word": "climate",
