@@ -3424,8 +3424,8 @@ window.quizData = [
     "meaning": "~인 채로 있다, 남아있다"
   },
   {
-    "word": "remain",
-    "meaning": "기초(를 두다)"
+    "word": "basics",
+    "meaning": "기본"
   },
   {
     "word": "shock",
