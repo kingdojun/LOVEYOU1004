@@ -3256,8 +3256,8 @@ window.quizData = [
     "meaning": "해안, 연안"
   },
   {
-    "word": "coast",
-    "meaning": "이웃(사람들), 지역"
+    "word": "region",
+    "meaning": "지방, 지역"
   },
   {
     "word": "degree",
