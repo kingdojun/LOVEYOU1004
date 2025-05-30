@@ -3412,8 +3412,8 @@ window.quizData = [
     "meaning": "제의[제공](하다)"
   },
   {
-    "word": "offer",
-    "meaning": "진보(하다), 전진(하다)"
+    "word": "progress",
+    "meaning": "진전, 진척"
   },
   {
     "word": "lock",
