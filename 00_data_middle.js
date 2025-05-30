@@ -5573,7 +5573,7 @@ window.quizData = [
   },
   {
     "word": "match",
-    "meaning": "행진(하다)"
+    "meaning": "일치하다, 아주 비슷하다)"
   },
   {
     "word": "ache",
