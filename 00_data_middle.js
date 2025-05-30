@@ -3340,7 +3340,7 @@ window.quizData = [
     "meaning": "산들바람, 미풍"
   },
   {
-    "word": "breeze",
+    "word": "standard",
     "meaning": "수준, 높이"
   },
   {
