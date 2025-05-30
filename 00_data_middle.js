@@ -3544,7 +3544,7 @@ window.quizData = [
     "meaning": "개인의"
   },
   {
-    "word": "personal",
+    "word": "flat",
     "meaning": "평평한, 바람 빠진"
   },
   {
