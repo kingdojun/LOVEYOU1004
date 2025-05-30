@@ -3364,7 +3364,7 @@ window.quizData = [
     "meaning": "기적"
   },
   {
-    "word": "miracle",
+    "word": "garbage",
     "meaning": "쓰레기"
   },
   {
