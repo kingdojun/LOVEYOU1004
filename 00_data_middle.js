@@ -3436,8 +3436,8 @@ window.quizData = [
     "meaning": "고치다, 수리(하다)"
   },
   {
-    "word": "repair",
-    "meaning": "(상황을) 바로잡다"
+    "word": "situation",
+    "meaning": "상황, 위치"
   },
   {
     "word": "dislike",
