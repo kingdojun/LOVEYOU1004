@@ -3556,8 +3556,8 @@ window.quizData = [
     "meaning": "역사상 중요한"
   },
   {
-    "word": "historic",
-    "meaning": "나무로 만든"
+    "word": "furniture",
+    "meaning": "가구"
   },
   {
     "word": "dead",
