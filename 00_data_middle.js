@@ -3328,7 +3328,7 @@ window.quizData = [
     "meaning": "가을"
   },
   {
-    "word": "autumn",
+    "word": "Engineering",
     "meaning": "공학"
   },
   {
