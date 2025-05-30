@@ -3568,8 +3568,8 @@ window.quizData = [
     "meaning": "서쪽의, 서양의"
   },
   {
-    "word": "western",
-    "meaning": "꽉 찬, 붐비는"
+    "word": "crowded",
+    "meaning": "붐비는"
   },
   {
     "word": "overweight",
@@ -3580,7 +3580,7 @@ window.quizData = [
     "meaning": "앞으로"
   },
   {
-    "word": "forward",
+    "word": "completely",
     "meaning": "완전히"
   },
   {
@@ -3592,8 +3592,8 @@ window.quizData = [
     "meaning": "정확하게"
   },
   {
-    "word": "exactly",
-    "meaning": "잘못, 서툴게, 몹시"
+    "word": "blunder",
+    "meaning": "실수"
   },
   {
     "word": "twice",
