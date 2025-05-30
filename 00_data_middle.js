@@ -3292,7 +3292,7 @@ window.quizData = [
     "meaning": "짐마차, 손수레"
   },
   {
-    "word": "cart",
+    "word": "Strength",
     "meaning": "힘, 세기, 강점"
   },
   {
