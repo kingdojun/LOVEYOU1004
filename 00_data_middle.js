@@ -3352,7 +3352,7 @@ window.quizData = [
     "meaning": "선택"
   },
   {
-    "word": "choice",
+    "word": "label",
     "meaning": "라벨, 상표"
   },
   {
