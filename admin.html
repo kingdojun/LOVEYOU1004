@@ -1,0 +1,52 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>방문자 통계 관리자 페이지</title>
+  
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyCyg0opTfIMhUC7inRS4xJ4JMEj1mDr4_s",
+    authDomain: "majeongn1lishapp-68230.firebaseapp.com",
+    databaseURL: "https://majeongn1lishapp-68230-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "majeongn1lishapp-68230",
+    storageBucket: "majeongn1lishapp-68230.appspot.com",
+    messagingSenderId: "973502210144",
+    appId: "1:973502210144:web:d7789640b14d949a59a305"
+  };
+  firebase.initializeApp(firebaseConfig);
+</script>
+
+  <style>
+    body { font-family: sans-serif; padding: 2rem; }
+    h2 { margin-bottom: 1rem; }
+    .stat { margin: 5px 0; }
+  </style>
+</head>
+<body>
+  <h2>📊 일별 방문자 수 통계</h2>
+  <div id="visit-stats">불러오는 중...</div>
+
+  <script>
+    const container = document.getElementById("visit-stats");
+    firebase.database().ref("visits").once("value").then(snapshot => {
+      const data = snapshot.val();
+      container.innerHTML = "";
+      if (!data) {
+        container.textContent = "방문 기록이 없습니다.";
+        return;
+      }
+      const dates = Object.keys(data).sort().reverse();
+      for (const date of dates) {
+        const p = document.createElement("p");
+        p.className = "stat";
+        p.textContent = `${date}: ${data[date]}명`;
+        container.appendChild(p);
+      }
+    });
+  </script>
+</body>
+</html>
