@@ -1,35 +1,87 @@
 
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-  <title>Admin Visitor Stats</title>
+  <meta charset="UTF-8">
+  <title>방문자 통계 관리자 페이지</title>
+  <style>
+    body {
+      background-color: #f0f4f8;
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 700px;
+      margin: 80px auto;
+      background: white;
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+    h2 {
+      color: #333;
+      margin-bottom: 30px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    table, th, td {
+      border: 1px solid #ddd;
+    }
+    th, td {
+      padding: 12px;
+      text-align: center;
+    }
+    th {
+      background-color: #f7f7f7;
+      font-weight: bold;
+    }
+    .error, .empty {
+      margin-top: 40px;
+      color: #888;
+      font-size: 1.2rem;
+    }
+  </style>
   <script type="module">
-    import { db, ref, get, child } from './firebase-init.js';
+    import { db, ref, get } from './firebase-init.js';
 
     const PASSWORD = "0313";
     const input = prompt("관리자 비밀번호를 입력하세요:");
 
     if (input !== PASSWORD) {
-      document.write("비밀번호가 틀렸습니다.");
+      document.write("<div class='error'>비밀번호가 틀렸습니다.</div>");
     } else {
       const visitsRef = ref(db, 'visits');
       get(visitsRef).then((snapshot) => {
         if (snapshot.exists()) {
           const data = snapshot.val();
-          let table = "<h2>방문자 수 통계</h2><table border='1'><tr><th>날짜</th><th>방문자 수</th></tr>";
+          let table = `
+            <div class="container">
+              <h2>📊 방문자 수 통계</h2>
+              <table>
+                <tr><th>날짜</th><th>방문자 수</th></tr>
+          `;
           for (const [date, info] of Object.entries(data)) {
             table += `<tr><td>${date}</td><td>${info.count}</td></tr>`;
           }
-          table += "</table>";
+          table += `
+              </table>
+            </div>
+          `;
           document.body.innerHTML = table;
         } else {
-          document.body.innerHTML = "기록된 방문자 수가 없습니다.";
+          document.body.innerHTML = "<div class='empty container'>기록된 방문자 수가 없습니다.</div>";
         }
       }).catch((error) => {
-        document.body.innerHTML = "데이터를 불러오는 중 오류 발생: " + error;
+        document.body.innerHTML = "<div class='error container'>데이터를 불러오는 중 오류 발생: " + error + "</div>";
       });
     }
   </script>
 </head>
-<body></body>
+<body>
+</body>
 </html>
