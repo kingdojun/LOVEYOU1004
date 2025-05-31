@@ -1,0 +1,109 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>비밀번호 입력</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+    }
+    .login-container {
+      text-align: center;
+      background: white;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 500px;
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      color: #333;
+    }
+    h2 {
+      font-size: 1.8rem;
+      margin-bottom: 2rem;
+      color: #444;
+    }
+    input[type="password"], button {
+      width: 90%;
+      padding: 1.2rem;
+      margin: 1rem auto;
+      display: block;
+      font-size: 1.3rem;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .footer {
+      margin-top: 2rem;
+      font-size: 0.9rem;
+      color: #777;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h1>마전중학교</h1>
+    <h2>비밀번호</h2>
+    <input type="password" id="password" placeholder="비밀번호 입력">
+    <button onclick="login()">로그인</button>
+  </div>
+  <div class="footer" style="text-align: center; font-size: 0.85rem; color: #888; margin-top: 2rem;">
+  Developed by Kim Yesong / 2-5<br>2025 · Ver 1.0
+</div>
+  <div style="text-align: center; margin-top: 30px;">
+    <a href="admin.html" target="_blank" style="
+      padding: 8px 18px;
+      background-color: #8BC34A;
+      color: white;
+      text-decoration: none;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      font-family: 'Segoe UI', 'Noto Sans KR', sans-serif;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      transition: all 0.25s ease-in-out;
+      display: inline-block;
+    " onmouseover="this.style.backgroundColor='#7CB342';"
+      onmouseout="this.style.backgroundColor='#8BC34A';">
+      관리자 모드
+    </a>
+  </div>
+
+
+  <script>
+    const correctPassword = "7092";
+
+    function login() {
+      const pw = document.getElementById("password").value;
+      if (pw === correctPassword) {
+        localStorage.setItem("current_user", "default_user");
+        location.href = "00_menu.html";
+      } else {
+        alert("비밀번호가 틀렸어요!");
+      }
+    }
+  </script>
+</body>
+</html>
