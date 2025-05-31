@@ -1,4 +1,3 @@
-
 // 00_script_review.js
 
 let wrongAnswers = JSON.parse(localStorage.getItem("wrongAnswers_middle")) || [];
@@ -26,18 +25,7 @@ function shuffle(array) {
 
 function speak(text) {
   const utter = new SpeechSynthesisUtterance(text);
-  
-  // 목소리 목록 불러오기
-  const voices = window.speechSynthesis.getVoices();
-  
-  // 미국 원어민 목소리 중 하나 선택 (예: 'Samantha' or 'Daniel')
-  utter.voice = voices.find(voice => voice.lang === 'en-US' && voice.name.includes('Samantha'));
-  
-  // 대체 설정
   utter.lang = 'en-US';
-  utter.rate = 1;
-  utter.pitch = 1;
-  
   speechSynthesis.speak(utter);
 }
 
@@ -46,26 +34,11 @@ function startQuiz() {
     alert("오답이 없습니다!");
     window.location.href = "00_menu.html";
     return;
-  } else if (wrongAnswers.length <= 3) {
-    displaySimpleReview();
   } else {
     wrongAnswers = shuffle([...wrongAnswers]);
     displayQuestion();
     startTimer();
   }
-}
-
-function displaySimpleReview() {
-  questionNumber.textContent = `1 / ${wrongAnswers.length}`;
-  const wordObj = wrongAnswers[0];
-  questionWord.textContent = wordObj.word;
-  speak(wordObj.word);
-  timerEl.style.display = "none";
-
-  const div = document.createElement("div");
-  div.className = "simple-answer";
-  div.innerHTML = `<strong>뜻: ${wordObj.meaning}</strong><br><br><button onclick="window.location.href='00_menu.html'">돌아가기</button>`;
-  choicesEl.appendChild(div);
 }
 
 function displayQuestion() {
@@ -120,6 +93,24 @@ function handleAnswer(isCorrect, selected, correct) {
       showRetry();
     }
   }, 1500);
+}
+
+function prevQuestion() {
+  if (currentIndex > 0) {
+    currentIndex--;
+    displayQuestion();
+    clearInterval(interval);
+    startTimer();
+  }
+}
+
+function nextQuestion() {
+  if (currentIndex < wrongAnswers.length - 1) {
+    currentIndex++;
+    displayQuestion();
+    clearInterval(interval);
+    startTimer();
+  }
 }
 
 function startTimer() {
