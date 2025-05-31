@@ -23,8 +23,16 @@ function shuffle(array) {
 
 function speak(text) {
   const utter = new SpeechSynthesisUtterance(text);
-  utter.lang = 'en-US';
-  speechSynthesis.speak(utter);
+ const voices = window.speechSynthesis.getVoices();
+      
+      // 미국 원어민 목소리 중 하나 선택 (예: 'Daniel' or 'Samantha')
+      utter.voice = voices.find(voice => voice.lang === 'en-US' && voice.name.includes('Samantha'));
+      
+      // 대체 설정
+      utter.lang = 'en-US';
+      utter.rate = 1;
+      utter.pitch = 1;
+      speechSynthesis.speak(utter);
 }
 
 function startQuiz() {
