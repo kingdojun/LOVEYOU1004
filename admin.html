@@ -1,52 +1,35 @@
 
 <!DOCTYPE html>
-<html lang="ko">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>방문자 통계 관리자 페이지</title>
-  
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-<script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyCyg0opTfIMhUC7inRS4xJ4JMEj1mDr4_s",
-    authDomain: "majeongn1lishapp-68230.firebaseapp.com",
-    databaseURL: "https://majeongn1lishapp-68230-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "majeongn1lishapp-68230",
-    storageBucket: "majeongn1lishapp-68230.appspot.com",
-    messagingSenderId: "973502210144",
-    appId: "1:973502210144:web:d7789640b14d949a59a305"
-  };
-  firebase.initializeApp(firebaseConfig);
-</script>
+  <title>Admin Visitor Stats</title>
+  <script type="module">
+    import { db, ref, get, child } from './firebase-init.js';
 
-  <style>
-    body { font-family: sans-serif; padding: 2rem; }
-    h2 { margin-bottom: 1rem; }
-    .stat { margin: 5px 0; }
-  </style>
-</head>
-<body>
-  <h2>📊 일별 방문자 수 통계</h2>
-  <div id="visit-stats">불러오는 중...</div>
+    const PASSWORD = "0313";
+    const input = prompt("관리자 비밀번호를 입력하세요:");
 
-  <script>
-    const container = document.getElementById("visit-stats");
-    firebase.database().ref("visits").once("value").then(snapshot => {
-      const data = snapshot.val();
-      container.innerHTML = "";
-      if (!data) {
-        container.textContent = "방문 기록이 없습니다.";
-        return;
-      }
-      const dates = Object.keys(data).sort().reverse();
-      for (const date of dates) {
-        const p = document.createElement("p");
-        p.className = "stat";
-        p.textContent = `${date}: ${data[date]}명`;
-        container.appendChild(p);
-      }
-    });
+    if (input !== PASSWORD) {
+      document.write("비밀번호가 틀렸습니다.");
+    } else {
+      const visitsRef = ref(db, 'visits');
+      get(visitsRef).then((snapshot) => {
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          let table = "<h2>방문자 수 통계</h2><table border='1'><tr><th>날짜</th><th>방문자 수</th></tr>";
+          for (const [date, info] of Object.entries(data)) {
+            table += `<tr><td>${date}</td><td>${info.count}</td></tr>`;
+          }
+          table += "</table>";
+          document.body.innerHTML = table;
+        } else {
+          document.body.innerHTML = "기록된 방문자 수가 없습니다.";
+        }
+      }).catch((error) => {
+        document.body.innerHTML = "데이터를 불러오는 중 오류 발생: " + error;
+      });
+    }
   </script>
-</body>
+</head>
+<body></body>
 </html>

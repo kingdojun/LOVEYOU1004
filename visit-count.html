@@ -1,0 +1,38 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Visit Counter</title>
+  <script type="module">
+    import { db, ref, get, set, increment, update } from './firebase-init.js';
+
+    function getTodayKey() {
+      const today = new Date();
+      return today.toISOString().split('T')[0]; // 'YYYY-MM-DD'
+    }
+
+    async function incrementVisit() {
+      const todayKey = getTodayKey();
+      const visitRef = ref(db, 'visits/' + todayKey);
+
+      try {
+        const snapshot = await get(visitRef);
+        if (snapshot.exists()) {
+          update(visitRef, { count: increment(1) });
+        } else {
+          set(visitRef, { count: 1 });
+        }
+        console.log("Visit recorded.");
+      } catch (error) {
+        console.error("Error updating visit count:", error);
+      }
+    }
+
+    incrementVisit();
+  </script>
+</head>
+<body>
+  <h1>Welcome!</h1>
+  <p>Your visit has been counted.</p>
+</body>
+</html>
