@@ -1,56 +1,66 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>마전중학교</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>중학 영단어 퀴즈</title>
   <style>
     body {
-      font-family: 'Noto Sans KR', sans-serif;
-      text-align: center;
-      background: #f7f7f7;
       margin: 0;
-      padding: 40px 20px;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Arial', sans-serif;
+      background-color: #f0f0f0;
+      flex-direction: column;
+    }
+    .container {
+      text-align: center;
     }
     h1 {
-      font-size: 2rem;
-      margin-bottom: 30px;
+      font-size: 3em;
+      margin-bottom: 2rem;
       color: #333;
     }
-    a.menu-button {
+    .menu-button {
       display: block;
+      width: 300px;
       padding: 20px;
-      border-radius: 16px;
-      font-size: 1.3rem;
-      font-weight: bold;
-      margin: 16px auto;
-      width: 80%;
-      text-decoration: none;
-      color: white;
-    }
-    .btn-quiz {
+      margin: 20px auto;
+      font-size: 1.5em;
       background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background-color 0.3s;
     }
-    .btn-review {
-      background-color: #f44336;
+    .menu-button:hover {
+      background-color: #45a049;
     }
-    footer {
-      margin-top: 40px;
+    .menu-button.red {
+      background-color: #e53935;
+    }
+    .menu-button.red:hover {
+      background-color: #c62828;
+    }
+    .footer {
+      margin-top: 2rem;
       font-size: 0.9rem;
-      color: #888;
+      color: #555;
     }
   </style>
 </head>
 <body>
-  <h1>마전중학교</h1>
-
-  <a class="menu-button btn-quiz" href="00_quiz_middle.html">중학 영단어 1800</a>
-  <a class="menu-button btn-review" href="00_review_middle.html">오답노트</a>
-
-  <footer>
-    Developed by Kim Yesong / 2-5<br>
-    2025 · Ver 1.0
-  </footer>
+  <div class="container">
+    <h1>마전중학교</h1>
+    <button class="menu-button" onclick="location.href='00_quiz_middle.html'">중학 영단어 1800</button>
+    <button class="menu-button red" onclick="location.href='00_review_middle.html'">오답노트</button>
+  </div>
+  <div class="footer" style="text-align: center; font-size: 0.85rem; color: #888; margin-top: 2rem;">
+  Developed by Kim Yesong / 2-5<br>2025 · Ver 1.0
+</div>
 </body>
 </html>

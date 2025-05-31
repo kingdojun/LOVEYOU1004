@@ -2,38 +2,138 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>중학 퀴즈</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>중학영단어 퀴즈</title>
+  <link rel="stylesheet" href="00_style.css" />
 </head>
 <body>
-  <h1>중학 영단어 퀴즈</h1>
-  <p>퀴즈를 시작하려면 버튼을 누르세요!</p>
+  <div id="quiz-container" class="quiz-centered">
+    <div id="question-number">1 / 500</div>
+    <div id="question-word">Loading...</div>
+    <div id="timer">⏱ 5</div>
+    <div id="choices" class="choices-container"></div>
+    <button id="pause-button">⏸ 일시정지</button>
+  </div>
 
-  <!-- 방문자 추적용 Firebase 코드 시작 -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+  <script src="00_data_middle.js"></script>
   <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyCyg0opTfIMhUC7inRS4xJ4JMEj1mDr4_s",
-      authDomain: "majeongn1lishapp-68230.firebaseapp.com",
-      databaseURL: "https://majeongn1lishapp-68230-default-rtdb.asia-southeast1.firebasedatabase.app",
-      projectId: "majeongn1lishapp-68230",
-      storageBucket: "majeongn1lishapp-68230.appspot.com",
-      messagingSenderId: "973502210144",
-      appId: "1:973502210144:web:d7789640b14d949a59a305"
-    };
-    firebase.initializeApp(firebaseConfig);
-  </script>
+    const questionNumber = document.getElementById("question-number");
+    const questionWord = document.getElementById("question-word");
+    const timerEl = document.getElementById("timer");
+    const choicesEl = document.getElementById("choices");
+    const pauseButton = document.getElementById("pause-button");
 
-  <script>
-    const today = new Date().toISOString().slice(0, 10);
-    if (!localStorage.getItem("visited_" + today)) {
-      const ref = firebase.database().ref("visits/" + today);
-      ref.transaction(count => (count || 0) + 1);
-      localStorage.setItem("visited_" + today, "true");
+    let quizData = window.quizData || [];
+    let questions = shuffle([...quizData]).slice(0, 500);
+    let currentIndex = 0;
+    let timer = 5;
+    let interval = null;
+    let paused = false;
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
     }
-  </script>
-  <!-- 방문자 추적용 Firebase 코드 끝 -->
 
+    function speak(text) {
+      const utter = new SpeechSynthesisUtterance(text);
+      const voices = window.speechSynthesis.getVoices();
+      
+      // 미국 원어민 목소리 중 하나 선택 (예: 'Samantha' or 'Daniel')
+      utter.voice = voices.find(voice => voice.lang === 'en-US' && voice.name.includes('Samantha'));
+      
+      // 대체 설정
+      utter.lang = 'en-US';
+      utter.rate = 1;
+      utter.pitch = 1;
+      speechSynthesis.speak(utter);
+    }
+
+    function saveWrongAnswer(wordObj) {
+      let wrongList = JSON.parse(localStorage.getItem("wrongAnswers_middle")) || [];
+      if (!wrongList.some(item => item.word === wordObj.word)) {
+        wrongList.push(wordObj);
+        localStorage.setItem("wrongAnswers_middle", JSON.stringify(wrongList));
+      }
+    }
+
+    function displayQuestion() {
+      const wordObj = questions[currentIndex];
+      questionNumber.textContent = `${currentIndex + 1} / ${questions.length}`;
+      questionWord.textContent = wordObj.word;
+      speak(wordObj.word);
+      timerEl.textContent = `⏱ ${timer}`;
+      choicesEl.innerHTML = "";
+
+      const correct = wordObj.meaning;
+      const options = shuffle([correct, ...getRandomMeanings(correct)]);
+
+      options.forEach(option => {
+        const btn = document.createElement("button");
+        btn.className = "choice-button";
+        btn.textContent = option;
+        btn.onclick = () => handleAnswer(option === correct, option, correct, wordObj);
+        choicesEl.appendChild(btn);
+      });
+
+      startTimer(wordObj);
+    }
+
+    function getRandomMeanings(exclude) {
+      const allMeanings = quizData.map(q => q.meaning).filter(m => m !== exclude);
+      return shuffle(allMeanings).slice(0, 3);
+    }
+
+    function handleAnswer(isCorrect, selected, correct, wordObj) {
+      clearInterval(interval);
+      const buttons = document.querySelectorAll(".choice-button");
+      buttons.forEach(btn => {
+        btn.disabled = true;
+        if (btn.textContent === correct) {
+          btn.style.backgroundColor = "green";
+          btn.style.color = "white";
+        }
+        if (!isCorrect && btn.textContent === selected) {
+          btn.style.backgroundColor = "red";
+          btn.style.color = "white";
+        }
+      });
+
+      if (!isCorrect) saveWrongAnswer(wordObj);
+
+      setTimeout(() => {
+        currentIndex++;
+        if (currentIndex < questions.length) {
+          displayQuestion();
+        }
+      }, 1500);
+    }
+
+    function startTimer(wordObj) {
+      timer = 5;
+      interval = setInterval(() => {
+        if (!paused) {
+          timer--;
+          timerEl.textContent = `⏱ ${timer}`;
+          if (timer === 0) {
+            clearInterval(interval);
+            saveWrongAnswer(questions[currentIndex]);
+            handleAnswer(false, "", questions[currentIndex].meaning, questions[currentIndex]);
+          }
+        }
+      }, 1000);
+    }
+
+    pauseButton.onclick = () => {
+      paused = !paused;
+      pauseButton.textContent = paused ? "▶ 재생" : "⏸ 일시정지";
+    };
+
+    displayQuestion();
+  </script>
 </body>
 </html>
