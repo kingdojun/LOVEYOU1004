@@ -3,7 +3,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>방문자 카운터</title>
+  <title>방문자 카운터 - FIXED</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
@@ -26,17 +26,18 @@
       return today.toISOString().split('T')[0]; // 'YYYY-MM-DD'
     }
 
-    async function incrementVisit() {
+    function incrementVisit() {
       const todayKey = getTodayKey();
       const visitRef = db.ref('visits/' + todayKey);
 
-      visitRef.get().then((snapshot) => {
+      visitRef.once("value").then((snapshot) => {
         if (snapshot.exists()) {
-          visitRef.update({ count: (snapshot.val().count || 0) + 1 });
+          const current = snapshot.val().count || 0;
+          visitRef.update({ count: current + 1 });
         } else {
           visitRef.set({ count: 1 });
         }
-        console.log("✅ Visit recorded.");
+        console.log("✅ Visit recorded!");
       }).catch((error) => {
         console.error("❌ Error updating visit count:", error);
       });
@@ -46,7 +47,7 @@
   </script>
 </head>
 <body>
-  <h1>Welcome to Visit Tracker</h1>
-  <p>This visit will be counted in Firebase.</p>
+  <h1>방문 감사합니다</h1>
+  <p>이 방문은 Firebase에 기록됩니다.</p>
 </body>
 </html>
