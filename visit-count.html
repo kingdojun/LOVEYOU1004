@@ -1,38 +1,53 @@
 
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-  <title>Visit Counter</title>
-  <script type="module">
-    import { db, ref, get, set, increment, update } from './firebase-init.js';
+  <meta charset="UTF-8">
+  <title>방문자 카운터 - FIXED</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCqqo7oIMhUCt7iNrS4XJ4MEpjTmDr4_s",
+      authDomain: "majeonenglishapp.firebaseapp.com",
+      databaseURL: "https://majeonenglishapp-68230-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "majeonenglishapp-68230",
+      storageBucket: "majeonenglishapp.appspot.com",
+      messagingSenderId: "973502210144",
+      appId: "1:973502210144:web:d7789640b14d949a59a305"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
 
     function getTodayKey() {
       const today = new Date();
       return today.toISOString().split('T')[0]; // 'YYYY-MM-DD'
     }
 
-    async function incrementVisit() {
+    function incrementVisit() {
       const todayKey = getTodayKey();
-      const visitRef = ref(db, 'visits/' + todayKey);
+      const visitRef = db.ref('visits/' + todayKey);
 
-      try {
-        const snapshot = await get(visitRef);
+      visitRef.once("value").then((snapshot) => {
         if (snapshot.exists()) {
-          update(visitRef, { count: increment(1) });
+          const current = snapshot.val().count || 0;
+          visitRef.update({ count: current + 1 });
         } else {
-          set(visitRef, { count: 1 });
+          visitRef.set({ count: 1 });
         }
-        console.log("Visit recorded.");
-      } catch (error) {
-        console.error("Error updating visit count:", error);
-      }
+        console.log("✅ Visit recorded!");
+      }).catch((error) => {
+        console.error("❌ Error updating visit count:", error);
+      });
     }
 
-    incrementVisit();
+    window.onload = incrementVisit;
   </script>
 </head>
 <body>
-  <h1>Welcome!</h1>
-  <p>Your visit has been counted.</p>
+  <h1>방문 감사합니다</h1>
+  <p>이 방문은 Firebase에 기록됩니다.</p>
 </body>
 </html>
