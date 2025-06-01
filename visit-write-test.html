@@ -1,0 +1,40 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Write Test</title>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCqqo7oIMhUCt7iNrS4XJ4MEpjTmDr4_s",
+      authDomain: "majeonenglishapp.firebaseapp.com",
+      databaseURL: "https://majeonenglishapp-68230-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "majeonenglishapp-68230",
+      storageBucket: "majeonenglishapp.appspot.com",
+      messagingSenderId: "973502210144",
+      appId: "1:973502210144:web:d7789640b14d949a59a305"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    window.onload = function() {
+      const testRef = db.ref("visits/test_write_test");
+      testRef.set({ count: 999 })
+        .then(() => {
+          console.log("✅ TEST WRITE SUCCESS");
+          document.body.innerHTML = "<h1>✅ 쓰기 성공</h1>";
+        })
+        .catch((error) => {
+          console.error("❌ TEST WRITE ERROR:", error);
+          document.body.innerHTML = "<h1>❌ 쓰기 실패: " + error + "</h1>";
+        });
+    };
+  </script>
+</head>
+<body>
+  <h1>쓰기 테스트 중...</h1>
+</body>
+</html>
