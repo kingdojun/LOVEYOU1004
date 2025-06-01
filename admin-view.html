@@ -1,0 +1,95 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>방문자 관리자 모드</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 24px;
+      background: #f6f8fa;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 16px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      text-align: center;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: center;
+    }
+    th {
+      background: #f0f0f0;
+    }
+    .error, .empty {
+      margin-top: 40px;
+      font-size: 1.1rem;
+      color: #c00;
+      text-align: center;
+    }
+  </style>
+
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCqqo7oIMhUCt7iNrS4XJ4MEpjTmDr4_s",
+      authDomain: "majeonenglishapp.firebaseapp.com",
+      databaseURL: "https://majeonenglishapp-68230-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "majeonenglishapp-68230",
+      storageBucket: "majeonenglishapp.appspot.com",
+      messagingSenderId: "973502210144",
+      appId: "1:973502210144:web:d7789640b14d949a59a305"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    const PASSWORD = "0313";
+    const input = prompt("관리자 비밀번호를 입력하세요:");
+
+    window.onload = function () {
+      if (input !== PASSWORD) {
+        document.body.innerHTML = '<div class="error">비밀번호가 틀렸습니다.</div>';
+        return;
+      }
+
+      const visitsRef = db.ref("visits");
+      visitsRef.once("value")
+        .then((snapshot) => {
+          if (snapshot.exists()) {
+            const data = snapshot.val();
+            let html = '<div class="container"><h2>📊 방문자 수 통계</h2>';
+            html += '<table><tr><th>날짜</th><th>방문자 수</th></tr>';
+            for (const [date, info] of Object.entries(data)) {
+              html += `<tr><td>${date}</td><td>${info.count}</td></tr>`;
+            }
+            html += '</table></div>';
+            document.body.innerHTML = html;
+          } else {
+            document.body.innerHTML = '<div class="empty">기록된 방문자 수가 없습니다.</div>';
+          }
+        })
+        .catch((error) => {
+          document.body.innerHTML = '<div class="error">데이터 로딩 오류: ' + error + '</div>';
+        });
+    };
+  </script>
+</head>
+<body>
+</body>
+</html>
